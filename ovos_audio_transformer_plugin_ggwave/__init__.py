@@ -4,7 +4,7 @@ import pexpect
 from ovos_plugin_manager.templates.transformers import AudioTransformer
 from ovos_utils import create_daemon
 from ovos_utils.log import LOG
-from ovos_utils.messagebus import Message, get_mycroft_bus
+from ovos_utils.messagebus import Message
 
 
 # NOTE - could not get ggwave to work properly with the audio feed
@@ -24,11 +24,12 @@ class GGWavePlugin(AudioTransformer):
             "UTT:": self.handle_utt,
             "BUS:": self.handle_bus
         }
-        # TODO - allow passing bus to plugins instead of creating new connection
-        self.bus = get_mycroft_bus()
-        self.daemon = create_daemon(self.monitor_thread)
-
         self._ssid = None
+
+    def bind(self, bus=None):
+        """ attach messagebus """
+        super().bind(bus)
+        self.daemon = create_daemon(self.monitor_thread)
 
     def handle_bus(self, payload):
         LOG.info(f"bus msg_type: {payload}")
