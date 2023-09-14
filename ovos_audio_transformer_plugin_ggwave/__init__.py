@@ -1,3 +1,4 @@
+from distutils.spawn import find_executable
 from os.path import isfile, expanduser
 
 import pexpect
@@ -14,7 +15,9 @@ class GGWavePlugin(AudioTransformer):
     def __init__(self, config=None):
         config = config or {}
         super().__init__("ovos-audio-transformer-plugin-ggwave", 10, config)
-        self.binpath = self.config.get("binary") or expanduser("~/.local/bin/ggwave-rx")
+        self.binpath = self.config.get("binary") or \
+                       find_executable("ggwave-rx") or \
+                       expanduser("~/.local/bin/ggwave-rx")
         if not isfile(self.binpath):
             raise ValueError(f"ggwave-rx not found in {self.binpath}, "
                              f"please install from https://github.com/ggerganov/ggwave")
