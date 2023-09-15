@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en-us">
+<head>
+    <title>Hey Wifi</title>
+    <meta name="description" content="Web app to connect WiFi through sound for OpenVoiceOS devices">
+
+</head>
+<body>
+<div id="main-container">
+    <h1>
+        <a href="https://github.com/OpenVoiceOS">
+        <img src="https://raw.githubusercontent.com/OpenVoiceOS/ovos_assets/master/Logo/ovos-logo-512.png" id="logo"></img>
+    </a>
+
+    </h1>
+
+    Hey <b>WiFi</b>!
+
+    <br><br>
+    Broadcast the SSID and then the PASSWORD, your OpenVoiceOS device should then attempt to connect to the provided network
+    <br><br>
+
+    <input id="ssid" autocomplete="off" type="text" placeholder="WIFISSID">
+    <button onclick="onSend();" id="sendssid">BROADCAST SSID</button>
+    <br>
+    <input id="pswd" autocomplete="off" type="text" placeholder="WIFISSID">
+    <button onclick="onSend2();" id="sendpswd">BROADCAST PSWD </button>
+
+    <br><br>
+</div>
+
+<div class="footer">
+    <br>&copy; 2023 OpenVoiceOS
+</div>
+
+
+<script type="text/javascript" src="js/ggwave.js"></script>
+<script type='text/javascript'>
+    window.AudioContext = window.AudioContext || window.webkitAudioContext;
+    window.OfflineAudioContext = window.OfflineAudioContext || window.webkitOfflineAudioContext;
+
+    var context = null;
+
+    // the ggwave module instance
+    var ggwave = null;
+    var parameters = null;
+    var instance = null;
+
+    // instantiate the ggwave instance
+    // ggwave_factory comes from the ggwave.js module
+    ggwave_factory().then(function(obj) {
+        ggwave = obj;
+    });
+
+    var txssid = document.getElementById("ssid");
+    var txpswd = document.getElementById("pswd");
+
+    // helper function
+    function convertTypedArray(src, type) {
+        var buffer = new ArrayBuffer(src.byteLength);
+        var baseView = new src.constructor(buffer).set(src);
+        return new type(buffer);
+    }
+
+    // initialize audio context and ggwave
+    function init() {
+        if (!context) {
+            context = new AudioContext({sampleRate: 48000});
+
+            parameters = ggwave.getDefaultParameters();
+            parameters.sampleRateInp = context.sampleRate;
+            parameters.sampleRateOut = context.sampleRate;
+            instance = ggwave.init(parameters);
+        }
+    }
+
+    //
+    // Tx
+    //
+
+    function onSend() {
+        init();
+
+        // generate audio waveform
+        var waveform = ggwave.encode(instance, "SSID:" + txssid.value, ggwave.ProtocolId.GGWAVE_PROTOCOL_AUDIBLE_FAST, 10)
+
+        // play audio
+        var buf = convertTypedArray(waveform, Float32Array);
+        var buffer = context.createBuffer(1, buf.length, context.sampleRate);
+        buffer.getChannelData(0).set(buf);
+        var source = context.createBufferSource();
+        source.buffer = buffer;
+        source.connect(context.destination);
+        source.start(0);
+    }
+
+    function onSend2() {
+        init();
+
+        // generate audio waveform
+        var waveform = ggwave.encode(instance, "PSWD:" + txpswd.value, ggwave.ProtocolId.GGWAVE_PROTOCOL_AUDIBLE_FAST, 10)
+
+        // play audio
+        var buf = convertTypedArray(waveform, Float32Array);
+        var buffer = context.createBuffer(1, buf.length, context.sampleRate);
+        buffer.getChannelData(0).set(buf);
+        var source = context.createBufferSource();
+        source.buffer = buffer;
+        source.connect(context.destination);
+        source.start(0);
+    }
+
+
+</script>
+</body>
+</html>
