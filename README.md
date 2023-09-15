@@ -4,6 +4,9 @@ plugin for https://github.com/ggerganov/ggwave
 
 you need the ggwave-rx binary available, then you can emit special messages to be handled by this plugin via sound
 
+To setup WiFI on OpenVoiceOS devices go to https://openvoiceos.github.io/ovos-audio-transformer-plugin-ggwave/
+
+
 ## config
 
 enable the plugin in mycroft.conf
