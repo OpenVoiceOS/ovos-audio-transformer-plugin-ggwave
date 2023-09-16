@@ -14,19 +14,43 @@
 
     </h1>
 
-    Hey <b>WiFi</b>!
-
-    <br><br>
+    <h2>Hey WiFi!</h2>
     Broadcast the SSID and then the PASSWORD, your OpenVoiceOS device should then attempt to connect to the provided network
-    <br><br>
-
+    <br>
     <input id="ssid" autocomplete="off" type="text" placeholder="SSID">
     <button onclick="onSend();" id="sendssid">BROADCAST SSID</button>
     <br>
     <input id="pswd" autocomplete="off" type="text" placeholder="PASSWORD">
     <button onclick="onSend2();" id="sendpswd">BROADCAST PSWD </button>
 
-    <br><br>
+    <h2>Install a pip package</h2>
+    Broadcast the package name, and ovos-core will attempt to install it
+    <br>
+    <input id="pip" autocomplete="off" type="text" placeholder="package-name">
+    <button onclick="onSend3();" id="sendpip">INSTALL</button>
+    <br>
+
+    <h2>Install a skill from github  (setup.py required)</h2>
+    Broadcast the skill url, and ovos-core will attempt to install it
+    <br>
+    https://github.com/<input id="skill" autocomplete="off" type="text" placeholder="OpenVoiceOS/skill-ovos-wikipedia">
+    <button onclick="onSend4();" id="sendskill">INSTALL</button>
+    <br>
+
+    <h2>speak</h2>
+    Broadcast an utterance, and OpenVoiceOS devices will speak it out loud
+    <br>
+    <input id="speak" autocomplete="off" type="text" placeholder="hello world">
+    <button onclick="onSend5();" id="sendspeak">SPEAK</button>
+    <br>
+
+    <h2>say-to</h2>
+    Broadcast an utterance, and OpenVoiceOS devices will respond to it
+    <br>
+    <input id="say" autocomplete="off" type="text" placeholder="who are you">
+    <button onclick="onSend6();" id="sendsay">SAY</button>
+    <br>
+
 </div>
 
 <div class="footer">
@@ -54,6 +78,10 @@
 
     var txssid = document.getElementById("ssid");
     var txpswd = document.getElementById("pswd");
+    var txpip = document.getElementById("pip");
+    var txskill = document.getElementById("skill");
+    var txspeak = document.getElementById("speak");
+    var txutt = document.getElementById("say");
 
     // helper function
     function convertTypedArray(src, type) {
@@ -99,6 +127,70 @@
 
         // generate audio waveform
         var waveform = ggwave.encode(instance, "PSWD:" + txpswd.value, ggwave.ProtocolId.GGWAVE_PROTOCOL_AUDIBLE_FAST, 10)
+
+        // play audio
+        var buf = convertTypedArray(waveform, Float32Array);
+        var buffer = context.createBuffer(1, buf.length, context.sampleRate);
+        buffer.getChannelData(0).set(buf);
+        var source = context.createBufferSource();
+        source.buffer = buffer;
+        source.connect(context.destination);
+        source.start(0);
+    }
+
+    function onSend3() {
+        init();
+
+        // generate audio waveform
+        var waveform = ggwave.encode(instance, "PIP:" + txpip.value, ggwave.ProtocolId.GGWAVE_PROTOCOL_AUDIBLE_FAST, 10)
+
+        // play audio
+        var buf = convertTypedArray(waveform, Float32Array);
+        var buffer = context.createBuffer(1, buf.length, context.sampleRate);
+        buffer.getChannelData(0).set(buf);
+        var source = context.createBufferSource();
+        source.buffer = buffer;
+        source.connect(context.destination);
+        source.start(0);
+    }
+
+    function onSend4() {
+        init();
+
+        // generate audio waveform
+        var waveform = ggwave.encode(instance, "GHS:" + txskill.value, ggwave.ProtocolId.GGWAVE_PROTOCOL_AUDIBLE_FAST, 10)
+
+        // play audio
+        var buf = convertTypedArray(waveform, Float32Array);
+        var buffer = context.createBuffer(1, buf.length, context.sampleRate);
+        buffer.getChannelData(0).set(buf);
+        var source = context.createBufferSource();
+        source.buffer = buffer;
+        source.connect(context.destination);
+        source.start(0);
+    }
+
+    function onSend5() {
+        init();
+
+        // generate audio waveform
+        var waveform = ggwave.encode(instance, "SPEAK:" + txspeak.value, ggwave.ProtocolId.GGWAVE_PROTOCOL_AUDIBLE_FAST, 10)
+
+        // play audio
+        var buf = convertTypedArray(waveform, Float32Array);
+        var buffer = context.createBuffer(1, buf.length, context.sampleRate);
+        buffer.getChannelData(0).set(buf);
+        var source = context.createBufferSource();
+        source.buffer = buffer;
+        source.connect(context.destination);
+        source.start(0);
+    }
+
+    function onSend6() {
+        init();
+
+        // generate audio waveform
+        var waveform = ggwave.encode(instance, "UTT:" + txutt.value, ggwave.ProtocolId.GGWAVE_PROTOCOL_AUDIBLE_FAST, 10)
 
         // play audio
         var buf = convertTypedArray(waveform, Float32Array);
