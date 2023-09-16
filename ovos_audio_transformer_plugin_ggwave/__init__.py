@@ -25,7 +25,10 @@ class GGWavePlugin(AudioTransformer):
             "SSID:": self.handle_wifi_ssid,
             "PSWD:": self.handle_wifi_pswd,
             "UTT:": self.handle_utt,
-            "BUS:": self.handle_bus
+            "SPEAK:": self.handle_speak,
+            "JSON:": self.handle_json,
+            "BUS:": self.handle_bus,
+            "GHS:": self.handle_skill
         }
         self._ssid = None
 
@@ -33,6 +36,11 @@ class GGWavePlugin(AudioTransformer):
         """ attach messagebus """
         super().bind(bus)
         self.daemon = create_daemon(self.monitor_thread)
+
+    def handle_skill(self, payload):
+        LOG.info(f"github skill to install: {payload}")
+        # TODO - listener to this message not implemented, it might change
+        self.bus.emit(Message("ovos.skills.install", {"url": payload}))
 
     def handle_bus(self, payload):
         LOG.info(f"bus msg_type: {payload}")
@@ -46,6 +54,18 @@ class GGWavePlugin(AudioTransformer):
     def handle_wifi_ssid(self, payload):
         LOG.info(f"Wifi AP: {payload}")
         self._ssid = payload
+
+    def handle_speak(self, payload):
+        LOG.info(f"Speak: {payload}")
+        self.bus.emit(Message("speak",  {"utterance": [payload]}))
+
+    def handle_json(self, payload):
+        LOG.info(f"JSON: {payload}")
+        try:
+            msg = Message.deserialize(payload)
+            self.bus.emit(msg)
+        except:
+            LOG.exception("failed to deserialize message")
 
     def handle_wifi_pswd(self, payload):
         if not self._ssid:

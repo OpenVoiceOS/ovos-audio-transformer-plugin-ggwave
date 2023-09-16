@@ -25,19 +25,6 @@ enable the plugin in mycroft.conf
 
 the easiest way to test is by using https://ggwave-js.ggerganov.com/ to send audio payloads
 
-
-### Bus
-
-inject a simple message in the messagebus
-
-`BUS:recognizer_loop:sleep`
-
-### Utterance
-
-inject an utterance in the messagebus like if the user spoke it to the microphone
-
-`UTT:hello cruel world`
-
 ### Wifi setup
 
 emit a message setting the wifi SSID
@@ -50,3 +37,37 @@ if password is empty then it is assumed to be an open network
 `PSWD:`
 
 once password is received a bus message is sent for [ovos-PHAL-plugin-network-manager](https://github.com/OpenVoiceOS/ovos-PHAL-plugin-network-manager) to handle
+
+### Install a github skill
+
+WIP - not yet implemented in ovos-core
+
+install a skill from a github url
+
+`GHS:https://github.com/OpenVoiceOS/skill-ovos-icanhazdadjokes`
+
+### Utterance
+
+inject an utterance in the messagebus like if the user spoke it to the microphone
+
+`UTT:hello cruel world`
+
+### Speak
+
+make a OVOS device speak
+
+`SPEAK:hello world`
+
+### Bus
+
+inject a simple message in the messagebus
+
+`BUS:recognizer_loop:sleep`
+
+### Json
+
+inject a serialized message in the messagebus
+
+`JSON:{"type": "speak", "data": {"utterance": "hello"}, "context": {}}`
+
+
