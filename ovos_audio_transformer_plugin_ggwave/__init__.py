@@ -136,13 +136,16 @@ class GGWavePlugin(AudioTransformer):
                     for opcode, handler in self.OPCODES.items():
                         if payload.startswith(opcode):
                             p = payload.split(opcode, 1)[-1]
-                            handler(p)
+                            if self.user_enabled:
+                                handler(p)
+                            else:
+                                LOG.debug("ignoring ggwave payload, user did not enable ggwave")
                             break
                     else:
-                        print(f"invalid ggwave payload: {payload}")
+                        LOG.debug(f"invalid ggwave payload: {payload}")
             except pexpect.exceptions.EOF:
                 # exited
-                print("Exited ggwave-rx process")
+                LOG.error("Exited ggwave-rx process")
                 break
             except pexpect.exceptions.TIMEOUT:
                 # nothing happened for a while
