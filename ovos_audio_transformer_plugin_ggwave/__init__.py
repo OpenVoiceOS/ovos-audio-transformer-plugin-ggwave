@@ -21,6 +21,7 @@ class GGWavePlugin(AudioTransformer):
         if not isfile(self.binpath):
             raise ValueError(f"ggwave-rx not found in {self.binpath}, "
                              f"please install from https://github.com/ggerganov/ggwave")
+        # TODO - individual config to enable/disable each
         self.OPCODES = {
             "SSID:": self.handle_wifi_ssid,
             "PSWD:": self.handle_wifi_pswd,
@@ -28,7 +29,8 @@ class GGWavePlugin(AudioTransformer):
             "SPEAK:": self.handle_speak,
             "JSON:": self.handle_json,
             "BUS:": self.handle_bus,
-            "GHS:": self.handle_skill
+            "GHS:": self.handle_skill,
+            "PIP:": self.handle_pip
         }
         self._ssid = None
 
@@ -39,8 +41,11 @@ class GGWavePlugin(AudioTransformer):
 
     def handle_skill(self, payload):
         LOG.info(f"github skill to install: {payload}")
-        # TODO - listener to this message not implemented, it might change
         self.bus.emit(Message("ovos.skills.install", {"url": payload}))
+
+    def handle_pip(self, payload):
+        LOG.info(f"pip package to install: {payload}")
+        self.bus.emit(Message("ovos.pip.install", {"packages": []}))
 
     def handle_bus(self, payload):
         LOG.info(f"bus msg_type: {payload}")
