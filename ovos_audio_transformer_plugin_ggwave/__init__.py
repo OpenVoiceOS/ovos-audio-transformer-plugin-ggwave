@@ -40,6 +40,8 @@ class GGWavePlugin(AudioTransformer):
         self.daemon = create_daemon(self.monitor_thread)
 
     def handle_skill(self, payload):
+        if not payload.startswith("https://github.com/"):
+            payload = f"https://github.com/{payload}"
         LOG.info(f"github skill to install: {payload}")
         self.bus.emit(Message("ovos.skills.install", {"url": payload}))
 
