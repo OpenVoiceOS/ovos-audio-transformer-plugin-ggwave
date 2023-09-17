@@ -15,28 +15,33 @@ class GGWaveSkill(OVOSAbstractApplication):
     def initialize(self):
         self.add_event("ggwave.enabled", self.handle_ggwave_on)
         self.add_event("ggwave.disabled", self.handle_ggwave_off)
+        self.enabled = False
 
     def handle_ggwave_on(self, message):
-        # TODO - dedicated sound
-        self.acknowledge()
+        self.enabled = True
         self.schedule_event(handler=self.handle_ggwave_off,
                             when=datetime.datetime.now() + datetime.timedelta(minutes=15),
                             name="ggwave.timeout")
 
     def handle_ggwave_off(self, message):
-        # TODO - dedicated sound
-        self.acknowledge()
+        self.enabled = False
 
     @intent_handler("enable.ggwave.intent")
     def handle_enable_ggwave(self, message):
-        self.bus.emit(message.forward("ovos.ggwave.enable"))
-        self.speak_dialog("ggwave.enabled")
+        if not self.enabled:
+            self.bus.emit(message.forward("ovos.ggwave.enable"))
+            self.speak_dialog("ggwave.enabled")
+        else:
+            self.speak_dialog("ggwave.already.enabled")
 
     @intent_handler("disable.ggwave.intent")
     def handle_disable_ggwave(self, message):
-        self.bus.emit(message.forward("ovos.ggwave.disable"))
-        self.speak_dialog("ggwave.disabled")
-        self.cancel_scheduled_event("ggwave.timeout")
+        if self.enabled:
+            self.bus.emit(message.forward("ovos.ggwave.disable"))
+            self.cancel_scheduled_event("ggwave.timeout")
+            self.speak_dialog("ggwave.disabled")
+        else:
+            self.speak_dialog("ggwave.already.disabled")
 
 
 # NOTE - could not get ggwave to work properly with the audio feed
@@ -84,10 +89,16 @@ class GGWavePlugin(AudioTransformer):
     def handle_enable(self, message: Message):
         self.user_enabled = True
         self.bus.emit(message.forward("ovos.ggwave.enabled"))
+        # TODO - dedicated sound
+        self.bus.emit(Message("mycroft.audio.play_sound",
+                              {"uri": "snd/acknowledge.mp3"}))
 
     def handle_disable(self, message: Message):
         self.user_enabled = False
         self.bus.emit(message.forward("ovos.ggwave.disabled"))
+        # TODO - dedicated sound
+        self.bus.emit(Message("mycroft.audio.play_sound",
+                              {"uri": "snd/error.mp3"}))
 
     def shutdown(self):
         if self.vui is not None:
