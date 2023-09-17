@@ -1,11 +1,42 @@
 from distutils.spawn import find_executable
 from os.path import isfile, expanduser
-
+import datetime
 import pexpect
 from ovos_plugin_manager.templates.transformers import AudioTransformer
 from ovos_utils import create_daemon
 from ovos_utils.log import LOG
 from ovos_utils.messagebus import Message
+from ovos_workshop.app import OVOSAbstractApplication
+from ovos_workshop.decorators import intent_handler
+
+
+class GGWaveSkill(OVOSAbstractApplication):
+
+    def initialize(self):
+        self.add_event("ggwave.enabled", self.handle_ggwave_on)
+        self.add_event("ggwave.disabled", self.handle_ggwave_off)
+
+    def handle_ggwave_on(self, message):
+        # TODO - dedicated sound
+        self.acknowledge()
+        self.schedule_event(handler=self.handle_ggwave_off,
+                            when=datetime.datetime.now() + datetime.timedelta(minutes=15),
+                            name="ggwave.timeout")
+
+    def handle_ggwave_off(self, message):
+        # TODO - dedicated sound
+        self.acknowledge()
+
+    @intent_handler("enable.ggwave.intent")
+    def handle_enable_ggwave(self, message):
+        self.bus.emit(message.forward("ovos.ggwave.enable"))
+        self.speak_dialog("ggwave.enabled")
+
+    @intent_handler("disable.ggwave.intent")
+    def handle_disable_ggwave(self, message):
+        self.bus.emit(message.forward("ovos.ggwave.disable"))
+        self.speak_dialog("ggwave.disabled")
+        self.cancel_scheduled_event("ggwave.timeout")
 
 
 # NOTE - could not get ggwave to work properly with the audio feed
@@ -30,14 +61,37 @@ class GGWavePlugin(AudioTransformer):
             "JSON:": self.handle_json,
             "BUS:": self.handle_bus,
             "GHS:": self.handle_skill,
-            "PIP:": self.handle_pip
+            "PIP:": self.handle_pip,
+            "RMPIP:": self.handle_remove_pip
         }
+        self.debug = self.config.get("debug")
         self._ssid = None
+        self.vui = None
+        # TODO - autoenable if wifi has not been setup previously
+        self.user_enabled = False
 
     def bind(self, bus=None):
         """ attach messagebus """
         super().bind(bus)
+        # we load the voice interface as part of this plugin
+        # the skill interacts only via messagebus
+        self.vui = GGWaveSkill(bus=self.bus, skill_id="ggwave.openvoiceos")
+        self.bus.on("ovos.ggwave.enable", self.handle_enable)
+        self.bus.on("ovos.ggwave.disable", self.handle_disable)
+
         self.daemon = create_daemon(self.monitor_thread)
+
+    def handle_enable(self, message: Message):
+        self.user_enabled = True
+        self.bus.emit(message.forward("ovos.ggwave.enabled"))
+
+    def handle_disable(self, message: Message):
+        self.user_enabled = False
+        self.bus.emit(message.forward("ovos.ggwave.disabled"))
+
+    def shutdown(self):
+        if self.vui is not None:
+            self.vui.shutdown()
 
     def handle_skill(self, payload):
         if not payload.startswith("https://github.com/"):
@@ -48,6 +102,10 @@ class GGWavePlugin(AudioTransformer):
     def handle_pip(self, payload):
         LOG.info(f"pip package to install: {payload}")
         self.bus.emit(Message("ovos.pip.install", {"packages": []}))
+
+    def handle_remove_pip(self, payload):
+        LOG.info(f"pip package to uninstall: {payload}")
+        self.bus.emit(Message("ovos.pip.uninstall", {"packages": []}))
 
     def handle_bus(self, payload):
         LOG.info(f"bus msg_type: {payload}")
@@ -64,7 +122,7 @@ class GGWavePlugin(AudioTransformer):
 
     def handle_speak(self, payload):
         LOG.info(f"Speak: {payload}")
-        self.bus.emit(Message("speak",  {"utterance": [payload]}))
+        self.bus.emit(Message("speak", {"utterance": [payload]}))
 
     def handle_json(self, payload):
         LOG.info(f"JSON: {payload}")
@@ -96,18 +154,23 @@ class GGWavePlugin(AudioTransformer):
         while True:
             try:
                 txt = child.readline().decode("utf-8").strip()
+                if txt and self.debug:
+                    LOG.debug(txt)
                 if txt.startswith(marker):
                     payload = txt.split(marker)[-1][1:-1]
                     for opcode, handler in self.OPCODES.items():
                         if payload.startswith(opcode):
                             p = payload.split(opcode, 1)[-1]
-                            handler(p)
+                            if self.user_enabled:
+                                handler(p)
+                            else:
+                                LOG.debug("ignoring ggwave payload, user did not enable ggwave")
                             break
                     else:
-                        print(f"invalid ggwave payload: {payload}")
+                        LOG.debug(f"invalid ggwave payload: {payload}")
             except pexpect.exceptions.EOF:
                 # exited
-                print("Exited ggwave-rx process")
+                LOG.error("Exited ggwave-rx process")
                 break
             except pexpect.exceptions.TIMEOUT:
                 # nothing happened for a while
