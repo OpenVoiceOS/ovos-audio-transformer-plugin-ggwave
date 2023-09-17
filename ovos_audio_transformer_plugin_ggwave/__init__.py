@@ -60,6 +60,7 @@ class GGWavePlugin(AudioTransformer):
             "PIP:": self.handle_pip,
             "RMPIP:": self.handle_remove_pip
         }
+        self.debug = self.config.get("debug")
         self._ssid = None
         self.vui = None
         # TODO - autoenable if wifi has not been setup previously
@@ -149,7 +150,7 @@ class GGWavePlugin(AudioTransformer):
         while True:
             try:
                 txt = child.readline().decode("utf-8").strip()
-                if txt:
+                if txt and self.debug:
                     print(txt)
                 if txt.startswith(marker):
                     payload = txt.split(marker)[-1][1:-1]
