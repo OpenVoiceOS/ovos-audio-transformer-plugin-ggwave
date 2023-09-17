@@ -30,6 +30,13 @@
     <button onclick="onSend3();" id="sendpip">INSTALL</button>
     <br>
 
+    <h2>Remove a pip package</h2>
+    Broadcast the package name, and ovos-core will attempt to remove it
+    <br>
+    <input id="unpip" autocomplete="off" type="text" placeholder="package-name">
+    <button onclick="onSend7();" id="sendunpip">INSTALL</button>
+    <br>
+
     <h2>Install a skill from github  (setup.py required)</h2>
     Broadcast the skill url, and ovos-core will attempt to install it
     <br>
@@ -79,6 +86,7 @@
     var txssid = document.getElementById("ssid");
     var txpswd = document.getElementById("pswd");
     var txpip = document.getElementById("pip");
+    var txunpip = document.getElementById("unpip");
     var txskill = document.getElementById("skill");
     var txspeak = document.getElementById("speak");
     var txutt = document.getElementById("say");
@@ -143,6 +151,22 @@
 
         // generate audio waveform
         var waveform = ggwave.encode(instance, "PIP:" + txpip.value, ggwave.ProtocolId.GGWAVE_PROTOCOL_AUDIBLE_FAST, 10)
+
+        // play audio
+        var buf = convertTypedArray(waveform, Float32Array);
+        var buffer = context.createBuffer(1, buf.length, context.sampleRate);
+        buffer.getChannelData(0).set(buf);
+        var source = context.createBufferSource();
+        source.buffer = buffer;
+        source.connect(context.destination);
+        source.start(0);
+    }
+
+    function onSend7() {
+        init();
+
+        // generate audio waveform
+        var waveform = ggwave.encode(instance, "RMPIP:" + txunpip.value, ggwave.ProtocolId.GGWAVE_PROTOCOL_AUDIBLE_FAST, 10)
 
         // play audio
         var buf = convertTypedArray(waveform, Float32Array);
