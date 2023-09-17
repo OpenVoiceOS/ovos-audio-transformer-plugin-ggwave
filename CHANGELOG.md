@@ -1,5 +1,17 @@
 # Changelog
 
+## [Unreleased](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/tree/HEAD)
+
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/compare/V0.0.0a8...HEAD)
+
+**Implemented enhancements:**
+
+- feat/vui [\#1](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/pull/1) ([JarbasAl](https://github.com/JarbasAl))
+
+## [V0.0.0a8](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/tree/V0.0.0a8) (2023-09-16)
+
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/compare/V0.0.0a7...V0.0.0a8)
+
 ## [V0.0.0a7](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/tree/V0.0.0a7) (2023-09-16)
 
 [Full Changelog](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/compare/V0.0.0a6...V0.0.0a7)
