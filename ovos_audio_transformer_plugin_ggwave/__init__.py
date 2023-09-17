@@ -1,6 +1,6 @@
 from distutils.spawn import find_executable
 from os.path import isfile, expanduser
-
+import datetime
 import pexpect
 from ovos_plugin_manager.templates.transformers import AudioTransformer
 from ovos_utils import create_daemon
@@ -19,6 +19,9 @@ class GGWaveSkill(OVOSAbstractApplication):
     def handle_ggwave_on(self, message):
         # TODO - dedicated sound
         self.acknowledge()
+        self.schedule_event(handler=self.handle_ggwave_off,
+                            when=datetime.datetime.now() + datetime.timedelta(minutes=15),
+                            name="ggwave.timeout")
 
     def handle_ggwave_off(self, message):
         # TODO - dedicated sound
@@ -33,6 +36,7 @@ class GGWaveSkill(OVOSAbstractApplication):
     def handle_disable_ggwave(self, message):
         self.bus.emit(message.forward("ovos.ggwave.disable"))
         self.speak_dialog("ggwave.disabled")
+        self.cancel_scheduled_event("ggwave.timeout")
 
 
 # NOTE - could not get ggwave to work properly with the audio feed
