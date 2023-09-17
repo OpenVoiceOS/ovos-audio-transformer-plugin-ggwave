@@ -98,7 +98,7 @@ class GGWavePlugin(AudioTransformer):
         self.bus.emit(message.forward("ovos.ggwave.disabled"))
         # TODO - dedicated sound
         self.bus.emit(Message("mycroft.audio.play_sound",
-                              {"uri": "snd/error.mp3"}))
+                              {"uri": "snd/acknowledge.mp3"}))
 
     def shutdown(self):
         if self.vui is not None:
