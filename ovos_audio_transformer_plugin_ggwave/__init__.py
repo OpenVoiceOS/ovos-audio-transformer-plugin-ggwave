@@ -6,19 +6,30 @@ from ovos_plugin_manager.templates.transformers import AudioTransformer
 from ovos_utils import create_daemon
 from ovos_utils.log import LOG
 from ovos_utils.messagebus import Message
-
-from ovos_workshop.skills.ovos import OVOSSkill
+from ovos_workshop.app import OVOSAbstractApplication
 from ovos_workshop.decorators import intent_handler
 
 
-class GGWaveSkill(OVOSSkill):
+class GGWaveSkill(OVOSAbstractApplication):
 
-    @intent_handler("ggwave.enable.intent")
+    def initialize(self):
+        self.add_event("ggwave.enabled", self.handle_ggwave_on)
+        self.add_event("ggwave.disabled", self.handle_ggwave_off)
+
+    def handle_ggwave_on(self, message):
+        # TODO - dedicated sound
+        self.acknowledge()
+
+    def handle_ggwave_off(self, message):
+        # TODO - dedicated sound
+        self.acknowledge()
+
+    @intent_handler("enable.ggwave.intent")
     def handle_enable_ggwave(self, message):
         self.bus.emit(message.forward("ovos.ggwave.enable"))
         self.speak_dialog("ggwave.enabled")
 
-    @intent_handler("ggwave.disable.intent")
+    @intent_handler("disable.ggwave.intent")
     def handle_disable_ggwave(self, message):
         self.bus.emit(message.forward("ovos.ggwave.disable"))
         self.speak_dialog("ggwave.disabled")
@@ -46,7 +57,8 @@ class GGWavePlugin(AudioTransformer):
             "JSON:": self.handle_json,
             "BUS:": self.handle_bus,
             "GHS:": self.handle_skill,
-            "PIP:": self.handle_pip
+            "PIP:": self.handle_pip,
+            "RMPIP:": self.handle_remove_pip
         }
         self._ssid = None
         self.vui = None
@@ -66,9 +78,11 @@ class GGWavePlugin(AudioTransformer):
 
     def handle_enable(self, message: Message):
         self.user_enabled = True
+        self.bus.emit(message.forward("ovos.ggwave.enabled"))
 
     def handle_disable(self, message: Message):
         self.user_enabled = False
+        self.bus.emit(message.forward("ovos.ggwave.disabled"))
 
     def shutdown(self):
         if self.vui is not None:
@@ -83,6 +97,10 @@ class GGWavePlugin(AudioTransformer):
     def handle_pip(self, payload):
         LOG.info(f"pip package to install: {payload}")
         self.bus.emit(Message("ovos.pip.install", {"packages": []}))
+
+    def handle_remove_pip(self, payload):
+        LOG.info(f"pip package to uninstall: {payload}")
+        self.bus.emit(Message("ovos.pip.uninstall", {"packages": []}))
 
     def handle_bus(self, payload):
         LOG.info(f"bus msg_type: {payload}")
@@ -99,7 +117,7 @@ class GGWavePlugin(AudioTransformer):
 
     def handle_speak(self, payload):
         LOG.info(f"Speak: {payload}")
-        self.bus.emit(Message("speak",  {"utterance": [payload]}))
+        self.bus.emit(Message("speak", {"utterance": [payload]}))
 
     def handle_json(self, payload):
         LOG.info(f"JSON: {payload}")
@@ -131,6 +149,8 @@ class GGWavePlugin(AudioTransformer):
         while True:
             try:
                 txt = child.readline().decode("utf-8").strip()
+                if txt:
+                    print(txt)
                 if txt.startswith(marker):
                     payload = txt.split(marker)[-1][1:-1]
                     for opcode, handler in self.OPCODES.items():
