@@ -151,7 +151,7 @@ class GGWavePlugin(AudioTransformer):
             try:
                 txt = child.readline().decode("utf-8").strip()
                 if txt and self.debug:
-                    print(txt)
+                    LOG.debug(txt)
                 if txt.startswith(marker):
                     payload = txt.split(marker)[-1][1:-1]
                     for opcode, handler in self.OPCODES.items():
