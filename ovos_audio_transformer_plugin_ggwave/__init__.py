@@ -73,7 +73,7 @@ class GGWavePlugin(AudioTransformer):
         self._ssid = None
         self.vui = None
         # TODO - autoenable if wifi has not been setup previously
-        self.user_enabled = False
+        self.user_enabled = self.config.get("start_enabled")
 
     def bind(self, bus=None):
         """ attach messagebus """
@@ -112,11 +112,13 @@ class GGWavePlugin(AudioTransformer):
 
     def handle_pip(self, payload):
         LOG.info(f"pip package to install: {payload}")
-        self.bus.emit(Message("ovos.pip.install", {"packages": []}))
+        self.bus.emit(Message("ovos.pip.install",
+                              {"packages": [payload]}))
 
     def handle_remove_pip(self, payload):
         LOG.info(f"pip package to uninstall: {payload}")
-        self.bus.emit(Message("ovos.pip.uninstall", {"packages": []}))
+        self.bus.emit(Message("ovos.pip.uninstall",
+                              {"packages": [payload]}))
 
     def handle_bus(self, payload):
         LOG.info(f"bus msg_type: {payload}")
