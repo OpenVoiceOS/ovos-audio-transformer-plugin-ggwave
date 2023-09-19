@@ -2,10 +2,23 @@
 
 plugin for https://github.com/ggerganov/ggwave
 
-you need the ggwave-rx binary available, then you can emit special messages to be handled by this plugin via sound
+Emit audio QR codes to be handled by this plugin
 
 To setup WiFI on OpenVoiceOS devices go to https://openvoiceos.github.io/ovos-audio-transformer-plugin-ggwave/
 
+## Install ggwave
+
+you need the ggwave-rx binary available
+
+```bash
+cd ~
+git clone https://github.com/ggerganov/ggwave --recursive
+cd ggwave && mkdir build && cd build
+cmake .. && make
+
+mv ~/ggwave/build/bin/* ~/.local/bin/
+rm -rf ggwave
+```
 
 ## config
 
