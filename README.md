@@ -40,15 +40,11 @@ once password is received a bus message is sent for [ovos-PHAL-plugin-network-ma
 
 ### Install a github skill
 
-WIP - needs https://github.com/OpenVoiceOS/ovos-core/pull/347/
-
 install a skill from a github url
 
 `GHS:https://github.com/OpenVoiceOS/skill-ovos-icanhazdadjokes`
 
 ### Install a python package
-
-WIP - needs https://github.com/OpenVoiceOS/ovos-core/pull/347/
 
 install any package from pypi
 
