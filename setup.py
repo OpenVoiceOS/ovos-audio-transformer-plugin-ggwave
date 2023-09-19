@@ -1,8 +1,35 @@
 #!/usr/bin/env python3
+import logging
 import os
+import subprocess
+
 from setuptools import setup
+from setuptools.command.install import install
 
 BASEDIR = os.path.abspath(os.path.dirname(__file__))
+
+
+class CustomInstallCommand(install):
+    """Custom install setup to help run shell commands before installation"""
+
+    def run(self):
+        # attempt to compile ggwave
+        if not os.path.exists(os.path.expanduser("~/.local/bin/ggwave-rx")):
+            logging.info(f"compiling ggwave from source")
+
+            try:
+                with open("/tmp/install_ggwave.sh", "w") as f:
+                    f.write("""#!/bin/bash
+git clone https://github.com/ggerganov/ggwave --recursive /tmp/ggwave
+cd /tmp/ggwave && mkdir /tmp/ggwave/build && cd /tmp/ggwave/build
+cmake .. && make
+mv /tmp/ggwave/build/bin/* $HOME/.local/bin/
+rm -rf /tmp/ggwave
+""")
+                subprocess.call("/bin/bash /tmp/install_ggwave.sh".split())
+            except:
+                logging.error("failed to compile ggwave, please install it manually")
+        install.run(self)
 
 
 def get_version():
@@ -51,7 +78,6 @@ def required(requirements_file):
 
 PLUGIN_ENTRY_POINT = 'ovos-audio-transformer-plugin-ggwave = ovos_audio_transformer_plugin_ggwave:GGWavePlugin'
 
-
 setup(
     name='ovos-audio-transformer-plugin-ggwave',
     version=get_version(),
@@ -65,6 +91,7 @@ setup(
     package_data={'': package_files('ovos_audio_transformer_plugin_ggwave')},
     install_requires=required("requirements.txt"),
     zip_safe=True,
+    cmdclass={'install': CustomInstallCommand},  # compile ggwave-rx
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',

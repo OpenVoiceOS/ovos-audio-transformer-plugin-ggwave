@@ -8,16 +8,17 @@ To setup WiFI on OpenVoiceOS devices go to https://openvoiceos.github.io/ovos-au
 
 ## Install ggwave
 
-you need the ggwave-rx binary available
+you need the ggwave-rx binary available, setup.py will attempt to compile it automatically for you
 
+manual setup
 ```bash
-cd ~
-git clone https://github.com/ggerganov/ggwave --recursive
-cd ggwave && mkdir build && cd build
+#!/bin/bash
+git clone https://github.com/ggerganov/ggwave --recursive /tmp/ggwave
+cd /tmp/ggwave && mkdir /tmp/ggwave/build && cd /tmp/ggwave/build
 cmake .. && make
 
-mv ~/ggwave/build/bin/* ~/.local/bin/
-rm -rf ggwave
+mv /tmp/ggwave/build/bin/* $HOME/.local/bin/
+rm -rf /tmp/ggwave
 ```
 
 ## config
