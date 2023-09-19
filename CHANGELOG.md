@@ -1,5 +1,9 @@
 # Changelog
 
+## [V0.0.0a14](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/tree/V0.0.0a14) (2023-09-19)
+
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/compare/V0.0.0a13...V0.0.0a14)
+
 ## [V0.0.0a13](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/tree/V0.0.0a13) (2023-09-19)
 
 [Full Changelog](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/compare/V0.0.0a12...V0.0.0a13)
