@@ -74,7 +74,6 @@ class GGWavePlugin(AudioTransformer):
         self.debug = self.config.get("debug")
         self._ssid = None
         self.vui = None
-        # TODO - autoenable if wifi has not been setup previously
         self.user_enabled = self.config.get("start_enabled")
 
     def bind(self, bus=None):
@@ -134,6 +133,9 @@ class GGWavePlugin(AudioTransformer):
     def handle_wifi_ssid(self, payload):
         LOG.info(f"Wifi AP: {payload}")
         self._ssid = payload
+        snd = Configuration().get("sounds", {}).get("wifi_ap")
+        if snd:  # no sound by default
+            self.bus.emit(Message("mycroft.audio.play_sound", {"uri": snd}))
 
     def handle_speak(self, payload):
         LOG.info(f"Speak: {payload}")
@@ -176,7 +178,14 @@ class GGWavePlugin(AudioTransformer):
                 if txt and self.debug:
                     LOG.debug(txt)
                 if txt.startswith(marker):
+
+                    snd = Configuration().get("sounds", {}).get("ggwave_success", "snd/acknowledge.mp3")
+                    if snd:
+                        # no sound by default
+                        self.bus.emit(Message("mycroft.audio.play_sound", {"uri": snd}))
+
                     payload = txt.split(marker)[-1][1:-1]
+
                     for opcode, handler in self.OPCODES.items():
                         if payload.startswith(opcode):
                             p = payload.split(opcode, 1)[-1]
@@ -187,6 +196,10 @@ class GGWavePlugin(AudioTransformer):
                             break
                     else:
                         LOG.debug(f"invalid ggwave payload: {payload}")
+                        snd = Configuration().get("sounds", {}).get("ggwave_error")
+                        if snd:
+                            # no sound by default
+                            self.bus.emit(Message("mycroft.audio.play_sound", {"uri": snd}))
             except pexpect.exceptions.EOF:
                 # exited
                 LOG.error("Exited ggwave-rx process")
