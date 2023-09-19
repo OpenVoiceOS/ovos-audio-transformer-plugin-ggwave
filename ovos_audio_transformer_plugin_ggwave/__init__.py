@@ -1,7 +1,9 @@
+import datetime
 from distutils.spawn import find_executable
 from os.path import isfile, expanduser
-import datetime
+
 import pexpect
+from ovos_config import Configuration
 from ovos_plugin_manager.templates.transformers import AudioTransformer
 from ovos_utils import create_daemon
 from ovos_utils.log import LOG
@@ -144,10 +146,14 @@ class GGWavePlugin(AudioTransformer):
             self.bus.emit(msg)
         except:
             LOG.exception("failed to deserialize message")
+            snd = Configuration().get("sounds", {}).get("json_error", "snd/error.mp3")
+            self.bus.emit(Message("mycroft.audio.play_sound", {"uri": snd}))
 
     def handle_wifi_pswd(self, payload):
         if not self._ssid:
             LOG.error("received wifi password but wifi SSID not set! ignoring")
+            snd = Configuration().get("sounds", {}).get("wifi_error", "snd/error.mp3")
+            self.bus.emit(Message("mycroft.audio.play_sound", {"uri": snd}))
             return
 
         if not payload:
