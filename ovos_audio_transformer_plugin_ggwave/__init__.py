@@ -135,7 +135,7 @@ class GGWavePlugin(AudioTransformer):
 
     def handle_speak(self, payload):
         LOG.info(f"Speak: {payload}")
-        self.bus.emit(Message("speak", {"utterance": [payload]}))
+        self.bus.emit(Message("speak", {"utterance": payload}))
 
     def handle_json(self, payload):
         LOG.info(f"JSON: {payload}")
