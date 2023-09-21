@@ -21,7 +21,7 @@ mv /tmp/ggwave/build/bin/* $HOME/.local/bin/
 rm -rf /tmp/ggwave
 ```
 
-## config
+## Config
 
 enable the plugin in mycroft.conf
 
@@ -36,6 +36,13 @@ enable the plugin in mycroft.conf
     }
 }
 ```
+
+## Voice Interface
+
+This plugin registers intents with ovos-core to toggle ggwave on and off
+
+- (enable|start|allow) (ggwave|audio code|audio qr code)
+- (disable|stop|disallow|shutdown) (ggwave|audio code|audio qr code)
 
 ## Valid messages
 
