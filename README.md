@@ -41,8 +41,17 @@ enable the plugin in mycroft.conf
 
 This plugin registers intents with ovos-core to toggle ggwave on and off
 
-- (enable|start|allow) (ggwave|audio code|audio qr code)
-- (disable|stop|disallow|shutdown) (ggwave|audio code|audio qr code)
+in a spoken interaction users may refer to this plugin several ways, our intents register ggwave as
+- ggwave
+- audio code
+- audio qr code
+- audio data
+
+users can ask for basic on/off commands:
+- start ggwave
+- allow audio data
+- disable audio codes
+
 
 ## Valid messages
 
