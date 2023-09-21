@@ -8,9 +8,9 @@ To setup WiFI on OpenVoiceOS devices go to https://openvoiceos.github.io/ovos-au
 
 ## Install ggwave
 
-you need the ggwave-rx binary available, setup.py will attempt to compile it automatically for you
+you need the ggwave-rx binary available, when the plugin loads it will be downloaded if missing
 
-manual setup
+you can also install from source if you don't trust binaries or don't have internet at plugin load time
 ```bash
 #!/bin/bash
 git clone https://github.com/ggerganov/ggwave --recursive /tmp/ggwave
@@ -29,7 +29,9 @@ enable the plugin in mycroft.conf
 "listener": {
     "audio_transformers": {
         "ovos-audio-transformer-plugin-ggwave": {
-            "binary": "~/.local/bin/ggwave-rx"
+            "binary": "~/.local/bin/ggwave-rx",
+            "start_enabled": true,
+            "debug": true
         }
     }
 }

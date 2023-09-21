@@ -1,3 +1,4 @@
 ovos_plugin_manager
 ovos-workshop
 pexpect
+requests

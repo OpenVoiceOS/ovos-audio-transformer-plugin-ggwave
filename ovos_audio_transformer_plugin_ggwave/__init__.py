@@ -1,8 +1,12 @@
 import datetime
+import os
+import stat
 from distutils.spawn import find_executable
 from os.path import isfile, expanduser
+from platform import machine
 
 import pexpect
+import requests
 from ovos_config import Configuration
 from ovos_plugin_manager.templates.transformers import AudioTransformer
 from ovos_utils import create_daemon
@@ -53,12 +57,12 @@ class GGWavePlugin(AudioTransformer):
     def __init__(self, config=None):
         config = config or {}
         super().__init__("ovos-audio-transformer-plugin-ggwave", 10, config)
-        self.binpath = self.config.get("binary") or \
-                       find_executable("ggwave-rx") or \
-                       expanduser("~/.local/bin/ggwave-rx")
+        self.binpath = expanduser(self.config.get("binary") or \
+                                  find_executable("ggwave-rx") or \
+                                  "~/.local/bin/ggwave-rx")
         if not isfile(self.binpath):
-            raise ValueError(f"ggwave-rx not found in {self.binpath}, "
-                             f"please install from https://github.com/ggerganov/ggwave")
+            self.download_ggwave()
+        LOG.info(f"using binary: {self.binpath}")
         # TODO - individual config to enable/disable each
         self.OPCODES = {
             "SSID:": self.handle_wifi_ssid,
@@ -71,10 +75,27 @@ class GGWavePlugin(AudioTransformer):
             "PIP:": self.handle_pip,
             "RMPIP:": self.handle_remove_pip
         }
-        self.debug = self.config.get("debug")
+        self.debug = self.config.get("debug", False)
         self._ssid = None
         self.vui = None
-        self.user_enabled = self.config.get("start_enabled")
+        self.user_enabled = self.config.get("start_enabled", False)
+
+    def download_ggwave(self):
+        arch = machine()
+        if arch == 'x86_64':
+            url = "https://artifacts.smartgic.io/artifacts/ggwave/ggwave-rx.x86_64"
+        elif arch == "aarch64":
+            url = "https://artifacts.smartgic.io/artifacts/ggwave/ggwave-rx.aarch64"
+        else:
+            LOG.error("ggwave-rx binary not available and pre-compiled binary unavailable for download")
+            raise ValueError(f"ggwave-rx not found in {self.binpath}, "
+                             f"please install from https://github.com/ggerganov/ggwave")
+        LOG.info(f"downloading: {url}")
+        with open(self.binpath, "wb") as f:
+            f.write(requests.get(url).content)
+        # make executable
+        st = os.stat(self.binpath)
+        os.chmod(self.binpath, st.st_mode | stat.S_IEXEC)
 
     def bind(self, bus=None):
         """ attach messagebus """
