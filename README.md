@@ -4,7 +4,7 @@ plugin for https://github.com/ggerganov/ggwave
 
 Emit audio QR codes to be handled by this plugin
 
-To setup WiFI on OpenVoiceOS devices go to https://openvoiceos.github.io/ovos-audio-transformer-plugin-ggwave/
+Interact with this plugin from your [browser](https://openvoiceos.github.io/ovos-audio-transformer-plugin-ggwave/), including WiFi setup
 
 ## Install ggwave
 
@@ -54,9 +54,11 @@ users can ask for basic on/off commands:
 - disable audio codes
 
 
-## Valid messages
+## Valid Audio Data
 
-the easiest way to test is by using https://ggwave-js.ggerganov.com/ to send audio payloads
+this repo provides a test interface via [github pages](https://openvoiceos.github.io/ovos-audio-transformer-plugin-ggwave/)
+
+you can also test your own payloads via https://ggwave-js.ggerganov.com/ 
 
 ### Wifi setup
 
