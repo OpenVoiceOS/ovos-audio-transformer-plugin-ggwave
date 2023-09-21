@@ -15,6 +15,7 @@ you can also install from source if you don't trust binaries or don't have inter
 #!/bin/bash
 git clone https://github.com/ggerganov/ggwave --recursive /tmp/ggwave
 cd /tmp/ggwave && mkdir /tmp/ggwave/build && cd /tmp/ggwave/build
+sed -i 's/BUILD_SHARED_LIBS_DEFAULT ON/BUILD_SHARED_LIBS_DEFAULT OFF/g' ../CMakeLists.txt
 cmake .. && make
 
 mv /tmp/ggwave/build/bin/* $HOME/.local/bin/
