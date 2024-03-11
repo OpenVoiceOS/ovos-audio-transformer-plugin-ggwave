@@ -25,9 +25,11 @@ class GGWaveSkill(OVOSAbstractApplication):
 
     def handle_ggwave_on(self, message):
         self.enabled = True
-        self.schedule_event(handler=self.handle_ggwave_off,
-                            when=datetime.datetime.now() + datetime.timedelta(minutes=15),
-                            name="ggwave.timeout")
+        self.schedule_event(
+            handler=self.handle_ggwave_off,
+            when=datetime.datetime.now() + datetime.timedelta(minutes=15),
+            name="ggwave.timeout",
+        )
 
     def handle_ggwave_off(self, message):
         self.enabled = False
@@ -57,9 +59,11 @@ class GGWavePlugin(AudioTransformer):
     def __init__(self, config=None):
         config = config or {}
         super().__init__("ovos-audio-transformer-plugin-ggwave", 10, config)
-        self.binpath = expanduser(self.config.get("binary") or \
-                                  find_executable("ggwave-rx") or \
-                                  "~/.local/bin/ggwave-rx")
+        self.binpath = expanduser(
+            self.config.get("binary")
+            or find_executable("ggwave-rx")
+            or "~/.local/bin/ggwave-rx"
+        )
         if not isfile(self.binpath):
             self.download_ggwave()
         LOG.info(f"using binary: {self.binpath}")
@@ -73,7 +77,7 @@ class GGWavePlugin(AudioTransformer):
             "BUS:": self.handle_bus,
             "GHS:": self.handle_skill,
             "PIP:": self.handle_pip,
-            "RMPIP:": self.handle_remove_pip
+            "RMPIP:": self.handle_remove_pip,
         }
         self.debug = self.config.get("debug", False)
         self._ssid = None
@@ -82,14 +86,18 @@ class GGWavePlugin(AudioTransformer):
 
     def download_ggwave(self):
         arch = machine()
-        if arch == 'x86_64':
-            url = "https://artifacts.smartgic.io/artifacts/ggwave/ggwave-rx.x86_64"
+        if arch == "x86_64":
+            url = "https://artifacts.smartgic.io/ggwave/ggwave-rx.x86_64"
         elif arch == "aarch64":
-            url = "https://artifacts.smartgic.io/artifacts/ggwave/ggwave-rx.aarch64"
+            url = "https://artifacts.smartgic.io/ggwave/ggwave-rx.aarch64"
         else:
-            LOG.error("ggwave-rx binary not available and pre-compiled binary unavailable for download")
-            raise ValueError(f"ggwave-rx not found in {self.binpath}, "
-                             f"please install from https://github.com/ggerganov/ggwave")
+            LOG.error(
+                "ggwave-rx binary not available and pre-compiled binary unavailable for download"
+            )
+            raise ValueError(
+                f"ggwave-rx not found in {self.binpath}, "
+                f"please install from https://github.com/ggerganov/ggwave"
+            )
         LOG.info(f"downloading: {url}")
         with open(self.binpath, "wb") as f:
             f.write(requests.get(url).content)
@@ -98,7 +106,7 @@ class GGWavePlugin(AudioTransformer):
         os.chmod(self.binpath, st.st_mode | stat.S_IEXEC)
 
     def bind(self, bus=None):
-        """ attach messagebus """
+        """attach messagebus"""
         super().bind(bus)
         # we load the voice interface as part of this plugin
         # the skill interacts only via messagebus
@@ -112,15 +120,17 @@ class GGWavePlugin(AudioTransformer):
         self.user_enabled = True
         self.bus.emit(message.forward("ovos.ggwave.enabled"))
         # TODO - dedicated sound
-        self.bus.emit(Message("mycroft.audio.play_sound",
-                              {"uri": "snd/acknowledge.mp3"}))
+        self.bus.emit(
+            Message("mycroft.audio.play_sound", {"uri": "snd/acknowledge.mp3"})
+        )
 
     def handle_disable(self, message: Message):
         self.user_enabled = False
         self.bus.emit(message.forward("ovos.ggwave.disabled"))
         # TODO - dedicated sound
-        self.bus.emit(Message("mycroft.audio.play_sound",
-                              {"uri": "snd/acknowledge.mp3"}))
+        self.bus.emit(
+            Message("mycroft.audio.play_sound", {"uri": "snd/acknowledge.mp3"})
+        )
 
     def shutdown(self):
         if self.vui is not None:
@@ -134,13 +144,11 @@ class GGWavePlugin(AudioTransformer):
 
     def handle_pip(self, payload):
         LOG.info(f"pip package to install: {payload}")
-        self.bus.emit(Message("ovos.pip.install",
-                              {"packages": [payload]}))
+        self.bus.emit(Message("ovos.pip.install", {"packages": [payload]}))
 
     def handle_remove_pip(self, payload):
         LOG.info(f"pip package to uninstall: {payload}")
-        self.bus.emit(Message("ovos.pip.uninstall",
-                              {"packages": [payload]}))
+        self.bus.emit(Message("ovos.pip.uninstall", {"packages": [payload]}))
 
     def handle_bus(self, payload):
         LOG.info(f"bus msg_type: {payload}")
@@ -148,8 +156,7 @@ class GGWavePlugin(AudioTransformer):
 
     def handle_utt(self, payload):
         LOG.info(f"Utterance: {payload}")
-        self.bus.emit(Message("recognizer_loop:utterance",
-                              {"utterances": [payload]}))
+        self.bus.emit(Message("recognizer_loop:utterance", {"utterances": [payload]}))
 
     def handle_wifi_ssid(self, payload):
         LOG.info(f"Wifi AP: {payload}")
@@ -200,7 +207,11 @@ class GGWavePlugin(AudioTransformer):
                     LOG.debug(txt)
                 if txt.startswith(marker):
 
-                    snd = Configuration().get("sounds", {}).get("ggwave_success", "snd/acknowledge.mp3")
+                    snd = (
+                        Configuration()
+                        .get("sounds", {})
+                        .get("ggwave_success", "snd/acknowledge.mp3")
+                    )
                     if snd:
                         # no sound by default
                         self.bus.emit(Message("mycroft.audio.play_sound", {"uri": snd}))
@@ -213,14 +224,18 @@ class GGWavePlugin(AudioTransformer):
                             if self.user_enabled:
                                 handler(p)
                             else:
-                                LOG.debug("ignoring ggwave payload, user did not enable ggwave")
+                                LOG.debug(
+                                    "ignoring ggwave payload, user did not enable ggwave"
+                                )
                             break
                     else:
                         LOG.debug(f"invalid ggwave payload: {payload}")
                         snd = Configuration().get("sounds", {}).get("ggwave_error")
                         if snd:
                             # no sound by default
-                            self.bus.emit(Message("mycroft.audio.play_sound", {"uri": snd}))
+                            self.bus.emit(
+                                Message("mycroft.audio.play_sound", {"uri": snd})
+                            )
             except pexpect.exceptions.EOF:
                 # exited
                 LOG.error("Exited ggwave-rx process")
