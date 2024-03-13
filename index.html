@@ -1,53 +1,54 @@
 <!DOCTYPE html>
 <html lang="en-us">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OVOS ggwave</title>
     <meta name="description" content="Data through sound for OpenVoiceOS devices">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
+        /* Custom CSS styles */
         body {
-            font-family: Arial, sans-serif;
             background-color: #f8f9fa;
+            padding-top: 20px;
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
             margin: 0;
-            padding: 0;
         }
-        
+
         #main-container {
             max-width: 800px;
-            margin: 20px auto;
+            margin: 0 auto;
             padding: 20px;
             background-color: #fff;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
-        h1, h2 {
-            text-align: center;
+        h1,
+        h2 {
+            color: #333;
         }
 
-        #logo {
-            width: 100px;
-            height: 100px;
-            display: block;
-            margin: 0 auto;
-        }
-
-        input[type="text"] {
-            width: calc(100% - 100px);
-            padding: 8px;
+        input[type="text"],
+        button {
             margin-bottom: 10px;
+            padding: 8px;
             border: 1px solid #ccc;
             border-radius: 4px;
+            font-size: 16px;
+            width: calc(100% - 100px);
+            box-sizing: border-box;
         }
 
         button {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
             background-color: #007bff;
             color: #fff;
             cursor: pointer;
+            transition: background-color 0.3s;
+            width: auto;
+            padding: 8px 20px;
         }
 
         button:hover {
@@ -57,232 +58,153 @@
         .footer {
             text-align: center;
             margin-top: 20px;
+            color: #666;
         }
 
-        .footer p {
-            margin: 0;
+        #logo {
+            max-width: 100px;
         }
     </style>
 </head>
-<body>
-<div id="main-container">
 
-    <h1>OVOS ggwave</h1>
-    <p>Send commands to an OpenVoiceOS device via audio QR codes</p>
-    <h2>
+<body>
+    <div id="main-container">
+
+        <h2>OVOS ggwave</h2>
+        <p>Send commands to an OpenVoiceOS device via audio QR codes.</p>
         <a href="https://github.com/OpenVoiceOS">
             <img src="https://avatars.githubusercontent.com/u/72275918?s=200&v=4" id="logo" alt="OpenVoiceOS Logo">
         </a>
-    </h2>
-    <br>
 
-    <h2>Setup WiFi</h2>
-    <p>Broadcast the SSID and then the PASSWORD, your OpenVoiceOS device should then attempt to connect to the provided network</p>
-    <input id="ssid" autocomplete="off" type="text" placeholder="SSID">
-    <button onclick="onSend();" id="sendssid">BROADCAST SSID</button>
-    <br>
-    <input id="pswd" autocomplete="off" type="text" placeholder="PASSWORD">
-    <button onclick="onSend2();" id="sendpswd">BROADCAST PASSWORD</button>
-    <br>
+        <h2>Setup WiFi</h2>
+        <p>Broadcast the SSID and then the PASSWORD, your OpenVoiceOS device should then attempt to connect to the provided network.</p>
+        <input id="ssid" autocomplete="off" type="text" placeholder="SSID">
+        <button onclick="onSendSSID()">BROADCAST SSID</button><br>
+        <input id="pswd" autocomplete="off" type="text" placeholder="PASSWORD">
+        <button onclick="onSendPSWD()">BROADCAST PASSWORD</button>
 
-    <h2>Install a pip package</h2>
-    <p>Broadcast the package name, and ovos-core will attempt to install it</p>
-    <input id="pip" autocomplete="off" type="text" placeholder="Package Name">
-    <button onclick="onSend3();" id="sendpip">INSTALL</button>
-    <br>
+        <h2>Install a pip package</h2>
+        <p>Broadcast the package name, and ovos-core will attempt to install it.</p>
+        <input id="pip" autocomplete="off" type="text" placeholder="Package Name">
+        <button onclick="onSendPIP()">INSTALL</button>
 
-    <h2>Remove a pip package</h2>
-    <p>Broadcast the package name, and ovos-core will attempt to remove it</p>
-    <input id="unpip" autocomplete="off" type="text" placeholder="Package Name">
-    <button onclick="onSend7();" id="sendunpip">UNINSTALL</button>
-    <br>
+        <h2>Remove a pip package</h2>
+        <p>Broadcast the package name, and ovos-core will attempt to remove it.</p>
+        <input id="unpip" autocomplete="off" type="text" placeholder="Package Name">
+        <button onclick="onSendUNPIP()">UNINSTALL</button>
 
-    <h2>Install a skill from GitHub (setup.py required)</h2>
-    <p>Broadcast the skill URL, and ovos-core will attempt to install it</p>
-    <input id="skill" autocomplete="off" type="text" placeholder="GitHub URL">
-    <button onclick="onSend4();" id="sendskill">INSTALL</button>
-    <br>
+        <h2>Install a skill from GitHub (setup.py required)</h2>
+        <p>Broadcast the skill URL, and ovos-core will attempt to install it.</p>
+        <input id="skill" autocomplete="off" type="text" placeholder="OpenVoiceOS/skill-ovos-wikipedia">
+        <button onclick="onSendSkill()">INSTALL</button>
 
-    <h2>Speak</h2>
-    <p>Broadcast an utterance, and OpenVoiceOS devices will speak it out loud</p>
-    <input id="speak" autocomplete="off" type="text" placeholder="Utterance">
-    <button onclick="onSend5();" id="sendspeak">SPEAK</button>
-    <br>
+        <h2>Speak</h2>
+        <p>Broadcast an utterance, and OpenVoiceOS devices will speak it out loud.</p>
+        <input id="speak" autocomplete="off" type="text" placeholder="Hello, world!">
+        <button onclick="onSendSpeak()">SPEAK</button>
 
-    <h2>Say-to</h2>
-    <p>Broadcast an utterance, and OpenVoiceOS devices will respond to it</p>
-    <input id="say" autocomplete="off" type="text" placeholder="Utterance">
-    <button onclick="onSend6();" id="sendsay">SAY</button>
-    <br>
+        <h2>Say-to</h2>
+        <p>Broadcast an utterance, and OpenVoiceOS devices will respond to it.</p>
+        <input id="say" autocomplete="off" type="text" placeholder="Who are you?">
+        <button onclick="onSendSay()">SAY</button>
 
-</div>
+    </div>
 
-<div class="footer">
-    <p>&copy; 2023 OpenVoiceOS</p>
-</div>
+    <div class="footer">
+        <br>&copy; 2023 OpenVoiceOS
+    </div>
 
-<script type="text/javascript" src="js/ggwave.js"></script>
-<script type='text/javascript'>
-    window.AudioContext = window.AudioContext || window.webkitAudioContext;
-    window.OfflineAudioContext = window.OfflineAudioContext || window.webkitOfflineAudioContext;
+    <script type="text/javascript" src="js/ggwave.js"></script>
+    <script type='text/javascript'>
+        // Ensure variables are properly scoped
+        window.AudioContext = window.AudioContext || window.webkitAudioContext;
+        window.OfflineAudioContext = window.OfflineAudioContext || window.webkitOfflineAudioContext;
 
-    var context = null;
+        var context = null;
 
-    // the ggwave module instance
-    var ggwave = null;
-    var parameters = null;
-    var instance = null;
+        // the ggwave module instance
+        var ggwave = null;
+        var parameters = null;
+        var instance = null;
 
-    // instantiate the ggwave instance
-    // ggwave_factory comes from the ggwave.js module
-    ggwave_factory().then(function(obj) {
-        ggwave = obj;
-    });
+        // instantiate the ggwave instance
+        // ggwave_factory comes from the ggwave.js module
+        ggwave_factory().then(function (obj) {
+            ggwave = obj;
+        });
 
-    var txssid = document.getElementById("ssid");
-    var txpswd = document.getElementById("pswd");
-    var txpip = document.getElementById("pip");
-    var txunpip = document.getElementById("unpip");
-    var txskill = document.getElementById("skill");
-    var txspeak = document.getElementById("speak");
-    var txutt = document.getElementById("say");
+        // initialize audio context and ggwave
+        function init() {
+            if (!context) {
+                context = new AudioContext({ sampleRate: 48000 });
 
-    // helper function
-    function convertTypedArray(src, type) {
-        var buffer = new ArrayBuffer(src.byteLength);
-        var baseView = new src.constructor(buffer).set(src);
-        return new type(buffer);
-    }
-
-    // initialize audio context and ggwave
-    function init() {
-        if (!context) {
-            context = new AudioContext({sampleRate: 48000});
-
-            parameters = ggwave.getDefaultParameters();
-            parameters.sampleRateInp = context.sampleRate;
-            parameters.sampleRateOut = context.sampleRate;
-            instance = ggwave.init(parameters);
+                parameters = ggwave.getDefaultParameters();
+                parameters.sampleRateInp = context.sampleRate;
+                parameters.sampleRateOut = context.sampleRate;
+                instance = ggwave.init(parameters);
+            }
         }
-    }
 
-    //
-    // Tx
-    //
+        // Transmit data using ggwave
+        function transmitPackage(data) {
+            init();
 
-    function onSend() {
-        init();
+            // generate audio waveform with the data
+            var waveform = ggwave.encode(instance, data, ggwave.ProtocolId.GGWAVE_PROTOCOL_AUDIBLE_FAST, 10);
 
-        // generate audio waveform
-        var waveform = ggwave.encode(instance, "SSID:" + txssid.value, ggwave.ProtocolId.GGWAVE_PROTOCOL_AUDIBLE_FAST, 10)
+            // play audio
+            var buf = convertTypedArray(waveform, Float32Array);
+            var buffer = context.createBuffer(1, buf.length, context.sampleRate);
+            buffer.getChannelData(0).set(buf);
+            var source = context.createBufferSource();
+            source.buffer = buffer;
+            source.connect(context.destination);
+            source.start(0);
+        }
 
-        // play audio
-        var buf = convertTypedArray(waveform, Float32Array);
-        var buffer = context.createBuffer(1, buf.length, context.sampleRate);
-        buffer.getChannelData(0).set(buf);
-        var source = context.createBufferSource();
-        source.buffer = buffer;
-        source.connect(context.destination);
-        source.start(0);
-    }
+        // Helper function to convert typed arrays
+        function convertTypedArray(src, type) {
+            var buffer = new ArrayBuffer(src.byteLength);
+            var baseView = new src.constructor(buffer).set(src);
+            return new type(buffer);
+        }
 
-    function onSend2() {
-        init();
+        // Event listeners for sending commands
+        function onSendSSID() {
+            var ssid = document.getElementById("ssid").value;
+            transmitPackage("SSID:" + ssid);
+        }
 
-        // generate audio waveform
-        var waveform = ggwave.encode(instance, "PSWD:" + txpswd.value, ggwave.ProtocolId.GGWAVE_PROTOCOL_AUDIBLE_FAST, 10)
+        function onSendPSWD() {
+            var pswd = document.getElementById("pswd").value;
+            transmitPackage("PSWD:" + pswd);
+        }
 
-        // play audio
-        var buf = convertTypedArray(waveform, Float32Array);
-        var buffer = context.createBuffer(1, buf.length, context.sampleRate);
-        buffer.getChannelData(0).set(buf);
-        var source = context.createBufferSource();
-        source.buffer = buffer;
-        source.connect(context.destination);
-        source.start(0);
-    }
+        function onSendPIP() {
+            var pip = document.getElementById("pip").value;
+            transmitPackage("PIP:" + pip);
+        }
 
-    function onSend3() {
-        init();
+        function onSendUNPIP() {
+            var unpip = document.getElementById("unpip").value;
+            transmitPackage("RMPIP:" + unpip);
+        }
 
-        // generate audio waveform
-        var waveform = ggwave.encode(instance, "PIP:" + txpip.value, ggwave.ProtocolId.GGWAVE_PROTOCOL_AUDIBLE_FAST, 10)
+        function onSendSkill() {
+            var skill = document.getElementById("skill").value;
+            transmitPackage("GHS:" + skill);
+        }
 
-        // play audio
-        var buf = convertTypedArray(waveform, Float32Array);
-        var buffer = context.createBuffer(1, buf.length, context.sampleRate);
-        buffer.getChannelData(0).set(buf);
-        var source = context.createBufferSource();
-        source.buffer = buffer;
-        source.connect(context.destination);
-        source.start(0);
-    }
+        function onSendSpeak() {
+            var speak = document.getElementById("speak").value;
+            transmitPackage("SPEAK:" + speak);
+        }
 
-    function onSend7() {
-        init();
-
-        // generate audio waveform
-        var waveform = ggwave.encode(instance, "RMPIP:" + txunpip.value, ggwave.ProtocolId.GGWAVE_PROTOCOL_AUDIBLE_FAST, 10)
-
-        // play audio
-        var buf = convertTypedArray(waveform, Float32Array);
-        var buffer = context.createBuffer(1, buf.length, context.sampleRate);
-        buffer.getChannelData(0).set(buf);
-        var source = context.createBufferSource();
-        source.buffer = buffer;
-        source.connect(context.destination);
-        source.start(0);
-    }
-
-    function onSend4() {
-        init();
-
-        // generate audio waveform
-        var waveform = ggwave.encode(instance, "GHS:" + txskill.value, ggwave.ProtocolId.GGWAVE_PROTOCOL_AUDIBLE_FAST, 10)
-
-        // play audio
-        var buf = convertTypedArray(waveform, Float32Array);
-        var buffer = context.createBuffer(1, buf.length, context.sampleRate);
-        buffer.getChannelData(0).set(buf);
-        var source = context.createBufferSource();
-        source.buffer = buffer;
-        source.connect(context.destination);
-        source.start(0);
-    }
-
-    function onSend5() {
-        init();
-
-        // generate audio waveform
-        var waveform = ggwave.encode(instance, "SPEAK:" + txspeak.value, ggwave.ProtocolId.GGWAVE_PROTOCOL_AUDIBLE_FAST, 10)
-
-        // play audio
-        var buf = convertTypedArray(waveform, Float32Array);
-        var buffer = context.createBuffer(1, buf.length, context.sampleRate);
-        buffer.getChannelData(0).set(buf);
-        var source = context.createBufferSource();
-        source.buffer = buffer;
-        source.connect(context.destination);
-        source.start(0);
-    }
-
-    function onSend6() {
-        init();
-
-        // generate audio waveform
-        var waveform = ggwave.encode(instance, "UTT:" + txutt.value, ggwave.ProtocolId.GGWAVE_PROTOCOL_AUDIBLE_FAST, 10)
-
-        // play audio
-        var buf = convertTypedArray(waveform, Float32Array);
-        var buffer = context.createBuffer(1, buf.length, context.sampleRate);
-        buffer.getChannelData(0).set(buf);
-        var source = context.createBufferSource();
-        source.buffer = buffer;
-        source.connect(context.destination);
-        source.start(0);
-    }
-
-
-</script>
+        function onSendSay() {
+            var say = document.getElementById("say").value;
+            transmitPackage("UTT:" + say);
+        }
+    </script>
 </body>
+
 </html>
