@@ -2,7 +2,7 @@ import datetime
 import os
 import stat
 from distutils.spawn import find_executable
-from os.path import isfile, expanduser
+from os.path import isfile, expanduser, dirname
 from platform import machine
 
 import pexpect
@@ -99,6 +99,7 @@ class GGWavePlugin(AudioTransformer):
                 f"please install from https://github.com/ggerganov/ggwave"
             )
         LOG.info(f"downloading: {url}")
+        os.makedirs(dirname(self.binpath), exist_ok=True)
         with open(self.binpath, "wb") as f:
             f.write(requests.get(url).content)
         # make executable
