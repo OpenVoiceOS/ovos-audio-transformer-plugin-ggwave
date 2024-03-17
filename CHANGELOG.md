@@ -2,7 +2,15 @@
 
 ## [Unreleased](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/tree/HEAD)
 
-[Full Changelog](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/compare/V0.0.0a20...HEAD)
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/compare/V0.0.0a21...HEAD)
+
+**Merged pull requests:**
+
+- xtract skill [\#7](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/pull/7) ([JarbasAl](https://github.com/JarbasAl))
+
+## [V0.0.0a21](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/tree/V0.0.0a21) (2024-03-17)
+
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/compare/V0.0.0a20...V0.0.0a21)
 
 **Merged pull requests:**
 
