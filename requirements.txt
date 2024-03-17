@@ -1,4 +1,4 @@
 ovos_plugin_manager
 ovos-workshop
-pexpect
-requests
+ggwave~=0.4.2
+PyAudio~=0.2.14

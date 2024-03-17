@@ -6,36 +6,29 @@ Emit audio QR codes to be handled by this plugin
 
 Interact with this plugin from your [browser](https://openvoiceos.github.io/ovos-audio-transformer-plugin-ggwave/), including WiFi setup
 
-## Install ggwave
+> NOTE: ggwave [fails to install on python 3.11](https://github.com/ggerganov/ggwave/issues/89), you can use the wheel from here https://whl.smartgic.io/
 
-you need the ggwave-rx binary available, when the plugin loads it will be downloaded if missing
+## Listener Plugin
 
-you can also install from source if you don't trust binaries or don't have internet at plugin load time
-```bash
-#!/bin/bash
-git clone https://github.com/ggerganov/ggwave --recursive /tmp/ggwave
-cd /tmp/ggwave && mkdir /tmp/ggwave/build && cd /tmp/ggwave/build
-sed -i 's/BUILD_SHARED_LIBS_DEFAULT ON/BUILD_SHARED_LIBS_DEFAULT OFF/g' ../CMakeLists.txt
-cmake .. && make
-
-mv /tmp/ggwave/build/bin/* $HOME/.local/bin/
-rm -rf /tmp/ggwave
-```
-
-## Config
-
-enable the plugin in mycroft.conf
+To have this plugin loaded by dinkum-listener, enable it in mycroft.conf
 
 ```javascript
 "listener": {
     "audio_transformers": {
         "ovos-audio-transformer-plugin-ggwave": {
-            "binary": "~/.local/bin/ggwave-rx",
-            "start_enabled": true,
-            "debug": true
+            "start_enabled": true
         }
     }
 }
+```
+
+## Standalone
+
+You can also run the plugin in standalone mode, in it's own process or docker container
+
+Launch with the console entrypoint
+```bash
+ovos-ggwave-listener
 ```
 
 ## Voice Interface
