@@ -6,13 +6,34 @@ Emit audio QR codes to be handled by this plugin
 
 Interact with this plugin from your [browser](https://openvoiceos.github.io/ovos-audio-transformer-plugin-ggwave/), including WiFi setup
 
-> NOTE: ggwave [fails to install on python 3.11](https://github.com/ggerganov/ggwave/issues/89), you can use the wheel from here https://whl.smartgic.io/
-
 The companion skill [OpenVoiceOS/ovos-skill-ggwave](https://github.com/OpenVoiceOS/ovos-skill-ggwave) allows you to enable/disable this plugin by voice
+
+Skill stores support installing skills via GGWave:
+- [OVOS-skills-store](https://openvoiceos.github.io/OVOS-skills-store)
+- [OVOS-Hatchery-skills](https://ovoshatchery.github.io/OVOS-Hatchery-skills)
+  
+```javascript
+"skills": {
+    "installer": {
+      "allow_pip": true,
+      "allow_alphas": true,
+      "break_system_packages": false
+    }
+}
+```
+> **TIP** Allow ovos-core to install python packages, otherwise the install commands from this plugin will error out
+
+## Install
+
+`pip install ovos-audio-transformer-plugin-ggwave`
+
+> ggwave [fails to install on python 3.11](https://github.com/ggerganov/ggwave/issues/89), you can use the wheel from here https://whl.smartgic.io/ , plugin install should then work
 
 ## Listener Plugin
 
 To have this plugin loaded by dinkum-listener, enable it in mycroft.conf
+
+> **WARNING** currently not recommended, see [bug report in dinkum-listener](https://github.com/OpenVoiceOS/ovos-dinkum-listener/issues/98)
 
 ```javascript
 "listener": {
