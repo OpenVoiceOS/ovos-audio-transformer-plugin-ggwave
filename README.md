@@ -6,6 +6,7 @@ Emit audio QR codes to be handled by this plugin
 
 Interact with this plugin from your [browser](https://openvoiceos.github.io/ovos-audio-transformer-plugin-ggwave/), including WiFi setup
 
+> NOTE: ggwave [fails to install on python 3.11](https://github.com/ggerganov/ggwave/issues/89), you can use the wheel from here https://whl.smartgic.io/
 
 ## Config
 
