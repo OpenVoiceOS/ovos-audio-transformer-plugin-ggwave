@@ -1,5 +1,4 @@
 ovos_plugin_manager
 ovos-workshop
 ggwave~=0.4.2
-requests
 PyAudio~=0.2.14
