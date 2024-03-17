@@ -12,7 +12,11 @@ Skill stores support installing skills via GGWave:
   
 ```javascript
 "skills": {
-    "installer": {"allow_pip": true}
+    "installer": {
+      "allow_pip": true,
+      "allow_alphas": true,
+      "break_system_packages": false
+    }
 }
 ```
 > **TIP** Allow ovos-core to install python packages, otherwise the install commands from this plugin will error out
