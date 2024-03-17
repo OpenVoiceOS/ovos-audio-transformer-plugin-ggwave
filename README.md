@@ -6,32 +6,13 @@ Emit audio QR codes to be handled by this plugin
 
 Interact with this plugin from your [browser](https://openvoiceos.github.io/ovos-audio-transformer-plugin-ggwave/), including WiFi setup
 
-Skill stores support installing skills via GGWave:
-- [OVOS-skills-store](https://openvoiceos.github.io/OVOS-skills-store)
-- [OVOS-Hatchery-skills](https://ovoshatchery.github.io/OVOS-Hatchery-skills)
-  
-```javascript
-"skills": {
-    "installer": {
-      "allow_pip": true,
-      "allow_alphas": true,
-      "break_system_packages": false
-    }
-}
-```
-> **TIP** Allow ovos-core to install python packages, otherwise the install commands from this plugin will error out
+> NOTE: ggwave [fails to install on python 3.11](https://github.com/ggerganov/ggwave/issues/89), you can use the wheel from here https://whl.smartgic.io/
 
-## Install
-
-`pip install ovos-audio-transformer-plugin-ggwave`
-
-> ggwave [fails to install on python 3.11](https://github.com/ggerganov/ggwave/issues/89), you can use the wheel from here https://whl.smartgic.io/ , plugin install should then work
+The companion skill [OpenVoiceOS/ovos-skill-ggwave](https://github.com/OpenVoiceOS/ovos-skill-ggwave) allows you to enable/disable this plugin by voice
 
 ## Listener Plugin
 
 To have this plugin loaded by dinkum-listener, enable it in mycroft.conf
-
-> **WARNING** currently not recommended, see [bug report in dinkum-listener](https://github.com/OpenVoiceOS/ovos-dinkum-listener/issues/98)
 
 ```javascript
 "listener": {
@@ -51,22 +32,6 @@ Launch with the console entrypoint
 ```bash
 ovos-ggwave-listener
 ```
-
-## Voice Interface
-
-This plugin registers intents with ovos-core to toggle ggwave on and off
-
-in a spoken interaction users may refer to this plugin several ways, our intents register ggwave as
-- ggwave
-- audio code
-- audio qr code
-- audio data
-
-users can ask for basic on/off commands:
-- start ggwave
-- allow audio data
-- disable audio codes
-
 
 ## Valid Audio Data
 
