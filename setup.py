@@ -1,92 +1,66 @@
 #!/usr/bin/env python3
-import os
-
 from setuptools import setup
+from os.path import abspath, dirname, join, isfile, isdir
+from os import walk
 
-BASEDIR = os.path.abspath(os.path.dirname(__file__))
+# Define package information
+SKILL_CLAZZ = "GGWaveSkill"  # Make sure it matches __init__.py class name
+VERSION = "0.0.1"
+URL = "https://github.com/OpenVoiceOS/ovos-skill-ggwave"
+AUTHOR = "OpenVoiceOS"
+EMAIL = "jarbasai@mailfence.com"
+LICENSE = "Apache2.0"
+DESCRIPTION = "voice interface for ggwave plugin"
 
+PYPI_NAME = URL.split("/")[-1]  # pip install PYPI_NAME
 
-def get_version():
-    """ Find the version of the package"""
-    version = None
-    version_file = os.path.join(BASEDIR, 'ovos_audio_transformer_plugin_ggwave', 'version.py')
-    major, minor, build, alpha = (None, None, None, None)
-    with open(version_file) as f:
-        for line in f:
-            if 'VERSION_MAJOR' in line:
-                major = line.split('=')[1].strip()
-            elif 'VERSION_MINOR' in line:
-                minor = line.split('=')[1].strip()
-            elif 'VERSION_BUILD' in line:
-                build = line.split('=')[1].strip()
-            elif 'VERSION_ALPHA' in line:
-                alpha = line.split('=')[1].strip()
-
-            if ((major and minor and build and alpha) or
-                    '# END_VERSION_BLOCK' in line):
-                break
-    version = f"{major}.{minor}.{build}"
-    if alpha and int(alpha) > 0:
-        version += f"a{alpha}"
-    return version
+# Construct entry point for plugin
+SKILL_ID = f"{PYPI_NAME.lower()}.{AUTHOR.lower()}"
+SKILL_PKG = PYPI_NAME.lower().replace('-', '_')
+PLUGIN_ENTRY_POINT = f"{SKILL_ID}={SKILL_PKG}:{SKILL_CLAZZ}"
 
 
-def package_files(directory):
-    paths = []
-    for (path, directories, filenames) in os.walk(directory):
-        for filename in filenames:
-            paths.append(os.path.join('..', path, filename))
-    return paths
-
-
-def required(requirements_file):
-    """ Read requirements file and remove comments and empty lines. """
-    with open(os.path.join(BASEDIR, requirements_file), 'r') as f:
-        requirements = f.read().splitlines()
+# Function to parse requirements from file
+def get_requirements(requirements_filename: str = "requirements.txt"):
+    requirements_file = join(abspath(dirname(__file__)), requirements_filename)
+    if isfile(requirements_file):
+        with open(requirements_file, 'r', encoding='utf-8') as r:
+            requirements = r.readlines()
+        requirements = [r.strip() for r in requirements if r.strip() and not r.strip().startswith("#")]
         if 'MYCROFT_LOOSE_REQUIREMENTS' in os.environ:
             print('USING LOOSE REQUIREMENTS!')
             requirements = [r.replace('==', '>=').replace('~=', '>=') for r in requirements]
-        return [pkg for pkg in requirements
-                if pkg.strip() and not pkg.startswith("#")]
+        return requirements
+    return []
 
 
-PLUGIN_ENTRY_POINT = 'ovos-audio-transformer-plugin-ggwave = ovos_audio_transformer_plugin_ggwave:GGWavePlugin'
+# Function to find resource files
+def find_resource_files():
+    resource_base_dirs = ("locale", "ui", "vocab", "dialog", "regex", "res")
+    base_dir = abspath(dirname(__file__))
+    package_data = ["*.json"]
+    for res in resource_base_dirs:
+        if isdir(join(base_dir, res)):
+            for (directory, _, files) in walk(join(base_dir, res)):
+                if files:
+                    package_data.append(join(directory.replace(base_dir, "").lstrip('/'), '*'))
+    return package_data
 
+
+# Setup configuration
 setup(
-    name='ovos-audio-transformer-plugin-ggwave',
-    version=get_version(),
-    description='A speech lang detection plugin for mycroft',
-    url='https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave',
-    author='JarbasAi',
-    author_email='jarbasai@mailfence.com',
-    license='Apache-2.0',
-    packages=['ovos_audio_transformer_plugin_ggwave'],
+    name=PYPI_NAME,
+    version=VERSION,
+    description=DESCRIPTION,
+    url=URL,
+    author=AUTHOR,
+    author_email=EMAIL,
+    license=LICENSE,
+    package_dir={SKILL_PKG: ""},
+    package_data={SKILL_PKG: find_resource_files()},
+    packages=[SKILL_PKG],
     include_package_data=True,
-    package_data={'': package_files('ovos_audio_transformer_plugin_ggwave')},
-    install_requires=required("requirements.txt"),
-    zip_safe=True,
-    classifiers=[
-        'Development Status :: 3 - Alpha',
-        'Intended Audience :: Developers',
-        'Topic :: Text Processing :: Linguistic',
-        'License :: OSI Approved :: Apache Software License',
-
-        'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.0',
-        'Programming Language :: Python :: 3.1',
-        'Programming Language :: Python :: 3.2',
-        'Programming Language :: Python :: 3.3',
-        'Programming Language :: Python :: 3.4',
-        'Programming Language :: Python :: 3.5',
-        'Programming Language :: Python :: 3.6',
-    ],
-    keywords='ovos plugin',
-    entry_points={
-        'neon.plugin.audio': PLUGIN_ENTRY_POINT,
-        'console_scripts': [
-            'ovos-ggwave-listener=ovos_audio_transformer_plugin_ggwave:launch_cli'
-        ]
-    }
+    install_requires=get_requirements(),
+    keywords='ovos skill plugin',
+    entry_points={'ovos.plugin.skill': PLUGIN_ENTRY_POINT}
 )
