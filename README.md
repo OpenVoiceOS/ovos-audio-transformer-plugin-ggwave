@@ -6,6 +6,8 @@ Emit audio QR codes to be handled by this plugin
 
 Interact with this plugin from your [browser](https://openvoiceos.github.io/ovos-audio-transformer-plugin-ggwave/), including WiFi setup
 
+The companion skill [OpenVoiceOS/ovos-skill-ggwave](https://github.com/OpenVoiceOS/ovos-skill-ggwave) allows you to enable/disable this plugin by voice
+
 Skill stores support installing skills via GGWave:
 - [OVOS-skills-store](https://openvoiceos.github.io/OVOS-skills-store)
 - [OVOS-Hatchery-skills](https://ovoshatchery.github.io/OVOS-Hatchery-skills)
@@ -51,22 +53,6 @@ Launch with the console entrypoint
 ```bash
 ovos-ggwave-listener
 ```
-
-## Voice Interface
-
-This plugin registers intents with ovos-core to toggle ggwave on and off
-
-in a spoken interaction users may refer to this plugin several ways, our intents register ggwave as
-- ggwave
-- audio code
-- audio qr code
-- audio data
-
-users can ask for basic on/off commands:
-- start ggwave
-- allow audio data
-- disable audio codes
-
 
 ## Valid Audio Data
 
