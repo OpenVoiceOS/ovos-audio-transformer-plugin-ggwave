@@ -98,10 +98,6 @@ class GGWavePlugin(AudioTransformer):
         self.bus.emit(Message("mycroft.audio.play_sound",
                               {"uri": "snd/acknowledge.mp3"}))
 
-    def shutdown(self):
-        if self.vui is not None:
-            self.vui.shutdown()
-
     def handle_skill(self, payload):
         if not payload.startswith("https://github.com/"):
             payload = f"https://github.com/{payload}"
@@ -186,7 +182,6 @@ class GGWavePlugin(AudioTransformer):
                 if (not res is None):
                     try:
                         payload = res.decode("utf-8")
-                        print('Received text: ' + payload)
                         snd = Configuration().get("sounds", {}).get("ggwave_success", "snd/acknowledge.mp3")
                         if snd:
                             # no sound by default
@@ -219,14 +214,21 @@ class GGWavePlugin(AudioTransformer):
         """ perform any shutdown actions """
         self._stop.set()
         ggwave.free(self.ggwave)
+        if self.vui is not None:
+            self.vui.shutdown()
+
+
+def launch_cli():
+    from ovos_utils import wait_for_exit_signal
+    from ovos_bus_client.util import get_mycroft_bus
+
+    gg = GGWavePlugin({"start_enabled": True})
+
+    bus = get_mycroft_bus()
+    gg.bind(bus)
+
+    wait_for_exit_signal()  # wait for CTRl+C
 
 
 if __name__ == "__main__":
-    # this is just test code to use the plugin standalone
-    # TODO - companion cli standalone launcher
-    from ovos_utils import wait_for_exit_signal
-    from ovos_utils.fakebus import FakeBus
-
-    gg = GGWavePlugin()
-    gg.bind(FakeBus())
-    wait_for_exit_signal()
+    launch_cli()

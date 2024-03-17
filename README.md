@@ -8,9 +8,9 @@ Interact with this plugin from your [browser](https://openvoiceos.github.io/ovos
 
 > NOTE: ggwave [fails to install on python 3.11](https://github.com/ggerganov/ggwave/issues/89), you can use the wheel from here https://whl.smartgic.io/
 
-## Config
+## Listener Plugin
 
-enable the plugin in mycroft.conf
+To have this plugin loaded by dinkum-listener, enable it in mycroft.conf
 
 ```javascript
 "listener": {
@@ -20,6 +20,15 @@ enable the plugin in mycroft.conf
         }
     }
 }
+```
+
+## Standalone
+
+You can also run the plugin in standalone mode, in it's own process or docker container
+
+Launch with the console entrypoint
+```bash
+ovos-ggwave-listener
 ```
 
 ## Voice Interface

@@ -83,5 +83,10 @@ setup(
         'Programming Language :: Python :: 3.6',
     ],
     keywords='ovos plugin',
-    entry_points={'neon.plugin.audio': PLUGIN_ENTRY_POINT}
+    entry_points={
+        'neon.plugin.audio': PLUGIN_ENTRY_POINT,
+        'console_scripts': [
+            'ovos-ggwave-listener=ovos_audio_transformer_plugin_ggwave:launch_cli'
+        ]
+    }
 )
