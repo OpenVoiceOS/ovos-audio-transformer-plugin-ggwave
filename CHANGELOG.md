@@ -2,7 +2,15 @@
 
 ## [Unreleased](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/tree/HEAD)
 
-[Full Changelog](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/compare/V0.0.0a19...HEAD)
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/compare/V0.0.0a20...HEAD)
+
+**Merged pull requests:**
+
+- move to python ggwave [\#5](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/pull/5) ([JarbasAl](https://github.com/JarbasAl))
+
+## [V0.0.0a20](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/tree/V0.0.0a20) (2024-03-17)
+
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/compare/V0.0.0a19...V0.0.0a20)
 
 **Fixed bugs:**
 
