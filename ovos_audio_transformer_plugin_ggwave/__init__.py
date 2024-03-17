@@ -1,6 +1,7 @@
 import datetime
+import threading
 
-import pyaudio # TODO ditch me
+import pyaudio  # TODO ditch me
 from ovos_config import Configuration
 from ovos_plugin_manager.templates.transformers import AudioTransformer
 from ovos_utils import create_daemon
@@ -69,6 +70,8 @@ class GGWavePlugin(AudioTransformer):
         self._ssid = None
         self.vui = None
         self.user_enabled = self.config.get("start_enabled", False)
+        self.ggwave = ggwave.init()
+        self._stop = threading.Event()
 
     def bind(self, bus=None):
         """ attach messagebus """
@@ -176,12 +179,10 @@ class GGWavePlugin(AudioTransformer):
 
         stream = p.open(format=pyaudio.paFloat32, channels=1, rate=48000, input=True, frames_per_buffer=1024)
 
-        instance = ggwave.init()
-
         try:
-            while True:
+            while not self._stop.is_set():
                 data = stream.read(1024, exception_on_overflow=False)
-                res = ggwave.decode(instance, data)
+                res = ggwave.decode(self.ggwave, data)
                 if (not res is None):
                     try:
                         payload = res.decode("utf-8")
@@ -209,6 +210,15 @@ class GGWavePlugin(AudioTransformer):
                         pass
         except KeyboardInterrupt:
             pass
+
+        stream.stop_stream()
+        stream.close()
+        p.terminate()
+
+    def default_shutdown(self):
+        """ perform any shutdown actions """
+        self._stop.set()
+        ggwave.free(self.ggwave)
 
 
 if __name__ == "__main__":
