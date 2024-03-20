@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
-from setuptools import setup
-from os.path import abspath, dirname, join, isfile, isdir
+import os
 from os import walk
+from os.path import abspath, dirname, join, isfile, isdir
+
+from setuptools import setup
 
 # Define package information
 SKILL_CLAZZ = "GGWaveSkill"  # Make sure it matches __init__.py class name
@@ -60,7 +62,7 @@ setup(
     package_data={SKILL_PKG: find_resource_files()},
     packages=[SKILL_PKG],
     include_package_data=True,
-    install_requires=get_requirements(),
+    install_requires=get_requirements("requirements.txt"),
     keywords='ovos skill plugin',
     entry_points={'ovos.plugin.skill': PLUGIN_ENTRY_POINT}
 )
