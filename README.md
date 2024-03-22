@@ -1,4 +1,4 @@
-# GGWave Skill
+# <img src='gg.jpg' card_color='#00ff00' width='50' height='50' style='vertical-align:bottom'/> GGWave Skill
 
 Voice interface for [ggwave plugin](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave)
 
