@@ -1,0 +1,10 @@
+{
+    "disable.ggwave.intent": [
+        "(disable|stop|disallow|shutdown) (ggwave|audio code|audio codes|audio qr code|audio qr codes|audio data)",
+        "(ggwave|audio code|audio codes|audio qr code|audio qr codes|audio data) off"
+    ],
+    "enable.ggwave.intent": [
+        "(enable|start|allow) (ggwave|audio code|audio codes|audio qr code|audio qr codes|audio data)",
+        "(ggwave|audio code|audio codes|audio qr code|audio qr codes|audio data) on"
+    ]
+}
