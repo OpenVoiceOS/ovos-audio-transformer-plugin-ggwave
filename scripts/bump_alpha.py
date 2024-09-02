@@ -2,7 +2,7 @@ import fileinput
 from os.path import join, dirname
 
 
-version_file = join(dirname(dirname(__file__)), "ovos_audio_transformer_plugin_ggwave", "version.py")
+version_file = join(dirname(dirname(__file__)), "version.py")
 version_var_name = "VERSION_ALPHA"
 
 with open(version_file, "r", encoding="utf-8") as v:
