@@ -1,11 +1,22 @@
-# This workflow will generate a distribution and upload it to PyPI
-
-name: Publish Minor Release .X.0
+name: Stable Release
 on:
+  push:
+    branches: [master]
   workflow_dispatch:
 
 jobs:
-  build_and_publish:
+  publish_stable:
+    uses: TigreGotico/gh-automations/.github/workflows/publish-stable.yml@master
+    secrets: inherit
+    with:
+      branch: 'master'
+      version_file: 'version.py'
+      setup_py: 'setup.py'
+      publish_release: true
+
+  publish_pypi:
+    needs: publish_stable
+    if: success()  # Ensure this job only runs if the previous job succeeds
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -19,26 +30,6 @@ jobs:
       - name: Install Build Tools
         run: |
           python -m pip install build wheel
-      - name: Remove alpha (declare stable)
-        run: |
-          VER=$(python setup.py --version)
-          python scripts/remove_alpha.py
-      - name: "Generate release changelog"
-        uses: heinrichreimer/github-changelog-generator-action@v2.3
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-        id: changelog
-      - name: Commit to dev
-        uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          commit_message: Declare alpha stable
-          branch: dev 
-      - name: Push dev -> master
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: master
-          force: true
       - name: version
         run: echo "::set-output name=version::$(python setup.py --version)"
         id: version
@@ -54,23 +45,28 @@ jobs:
             Changes in this Release
             ${{ steps.changelog.outputs.changelog }}
           draft: false
-          prerelease: false
+          prerelease: true
+          commitish: dev
       - name: Build Distribution Packages
         run: |
           python setup.py sdist bdist_wheel
-      - name: Prepare next Minor version
-        run: echo "::set-output name=version::$(python setup.py --version)"
-        id: alpha
-      - name: Increment Version ${{ steps.alpha.outputs.version }}Alpha0
-        run: |
-          VER=$(python setup.py --version)
-          python scripts/bump_minor.py
-      - name: Commit to dev
-        uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          commit_message: Prepare Next Version
-          branch: dev
       - name: Publish to Test PyPI
         uses: pypa/gh-action-pypi-publish@master
         with:
           password: ${{secrets.PYPI_TOKEN}}
+
+
+  sync_dev:
+    needs: publish_stable
+    if: success()  # Ensure this job only runs if the previous job succeeds
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0 # otherwise, there would be errors pushing refs to the destination repository.
+          ref: master
+      - name: Push master -> dev
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: dev
