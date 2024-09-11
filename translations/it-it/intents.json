@@ -1,0 +1,10 @@
+{
+  "disable.ggwave.intent": [
+    "(disattiva|spegni|togli) i codici QR audio",
+    "[UNUSED]"
+  ],
+  "enable.ggwave.intent": [
+    "(attiva|accendi|mostra) i codici QR audio",
+    "[UNUSED]"
+  ]
+}

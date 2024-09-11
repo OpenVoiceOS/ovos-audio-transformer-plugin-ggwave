@@ -1,12 +1,12 @@
 # Changelog
 
-## [0.2.1a1](https://github.com/OpenVoiceOS/ovos-skill-ggwave/tree/0.2.1a1) (2024-09-11)
+## [V0.2.1](https://github.com/OpenVoiceOS/ovos-skill-ggwave/tree/V0.2.1) (2024-09-11)
 
-[Full Changelog](https://github.com/OpenVoiceOS/ovos-skill-ggwave/compare/V0.1.0...0.2.1a1)
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-skill-ggwave/compare/0.2.1...V0.2.1)
 
 **Merged pull requests:**
 
-- feat:semver [\#3](https://github.com/OpenVoiceOS/ovos-skill-ggwave/pull/3) ([JarbasAl](https://github.com/JarbasAl))
+- added italian [\#2](https://github.com/OpenVoiceOS/ovos-skill-ggwave/pull/2) ([gitlocalize-app[bot]](https://github.com/apps/gitlocalize-app))
 
 
 
