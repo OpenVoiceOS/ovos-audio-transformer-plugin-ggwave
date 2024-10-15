@@ -1,0 +1,10 @@
+{
+  "disable.ggwave.intent": [
+    "(desactiva|atura|no permetis|apaga) (el|la|els|les|es|sa|) (ggwave|ge ge ueif|codi d'àudio|codis d'àudio|codi qr d'àudio|codis qr d'àudio|dades d'àudio)",
+    "(ggwave|ge ge ueif|codi d'àudio|codis d'àudio|codi qr d'àudio|codis qr d'àudio|dades d'àudio) (desactivat|fora|apagat|aturat|off)"
+  ],
+  "enable.ggwave.intent": [
+    "(activa|inicia|permet|engega) (el|la|els|les|es|sa|) (ggwave|ge ge ueif|codi d'àudio|codis d'àudio|codi qr d'àudio|codis qr d'àudio|dades d'àudio)",
+    "(ggwave|ge ge ueif|codi d'àudio|codis d'àudio|codi qr d'àudio|codis qr d'àudio|dades d'àudio) (activat|engegat|on)"
+  ]
+}
