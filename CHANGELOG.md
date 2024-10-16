@@ -1,124 +1,12 @@
 # Changelog
 
-## [0.0.0a23](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/tree/0.0.0a23) (2024-09-11)
+## [0.0.1a1](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/tree/0.0.1a1) (2024-10-16)
 
-[Full Changelog](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/compare/V0.0.0a22...0.0.0a23)
-
-**Closed issues:**
-
-- plugin not loading after installation [\#6](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/issues/6)
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/compare/0.0.0...0.0.1a1)
 
 **Merged pull requests:**
 
-- feat:semver [\#11](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/pull/11) ([JarbasAl](https://github.com/JarbasAl))
-
-## [V0.0.0a22](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/tree/V0.0.0a22) (2024-03-17)
-
-[Full Changelog](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/compare/V0.0.0a21...V0.0.0a22)
-
-**Merged pull requests:**
-
-- xtract skill [\#7](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/pull/7) ([JarbasAl](https://github.com/JarbasAl))
-
-## [V0.0.0a21](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/tree/V0.0.0a21) (2024-03-17)
-
-[Full Changelog](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/compare/V0.0.0a20...V0.0.0a21)
-
-**Merged pull requests:**
-
-- move to python ggwave [\#5](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/pull/5) ([JarbasAl](https://github.com/JarbasAl))
-
-## [V0.0.0a20](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/tree/V0.0.0a20) (2024-03-17)
-
-[Full Changelog](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/compare/V0.0.0a19...V0.0.0a20)
-
-**Fixed bugs:**
-
-- fix/missing path [\#4](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/pull/4) ([JarbasAl](https://github.com/JarbasAl))
-
-## [V0.0.0a19](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/tree/V0.0.0a19) (2024-03-11)
-
-[Full Changelog](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/compare/V0.0.0a18...V0.0.0a19)
-
-**Fixed bugs:**
-
-- \[init\] Fix ggwave download URL [\#3](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/pull/3) ([goldyfruit](https://github.com/goldyfruit))
-
-**Merged pull requests:**
-
-- \[readme\] Compile binary as static [\#2](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/pull/2) ([goldyfruit](https://github.com/goldyfruit))
-
-## [V0.0.0a18](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/tree/V0.0.0a18) (2023-09-21)
-
-[Full Changelog](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/compare/V0.0.0a17...V0.0.0a18)
-
-## [V0.0.0a17](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/tree/V0.0.0a17) (2023-09-21)
-
-[Full Changelog](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/compare/V0.0.0a16...V0.0.0a17)
-
-## [V0.0.0a16](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/tree/V0.0.0a16) (2023-09-19)
-
-[Full Changelog](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/compare/V0.0.0a15...V0.0.0a16)
-
-## [V0.0.0a15](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/tree/V0.0.0a15) (2023-09-19)
-
-[Full Changelog](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/compare/V0.0.0a14...V0.0.0a15)
-
-## [V0.0.0a14](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/tree/V0.0.0a14) (2023-09-19)
-
-[Full Changelog](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/compare/V0.0.0a13...V0.0.0a14)
-
-## [V0.0.0a13](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/tree/V0.0.0a13) (2023-09-19)
-
-[Full Changelog](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/compare/V0.0.0a12...V0.0.0a13)
-
-## [V0.0.0a12](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/tree/V0.0.0a12) (2023-09-19)
-
-[Full Changelog](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/compare/V0.0.0a11...V0.0.0a12)
-
-## [V0.0.0a11](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/tree/V0.0.0a11) (2023-09-17)
-
-[Full Changelog](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/compare/V0.0.0a10...V0.0.0a11)
-
-## [V0.0.0a10](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/tree/V0.0.0a10) (2023-09-17)
-
-[Full Changelog](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/compare/V0.0.0a9...V0.0.0a10)
-
-## [V0.0.0a9](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/tree/V0.0.0a9) (2023-09-17)
-
-[Full Changelog](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/compare/V0.0.0a8...V0.0.0a9)
-
-**Implemented enhancements:**
-
-- feat/vui [\#1](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/pull/1) ([JarbasAl](https://github.com/JarbasAl))
-
-## [V0.0.0a8](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/tree/V0.0.0a8) (2023-09-16)
-
-[Full Changelog](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/compare/V0.0.0a7...V0.0.0a8)
-
-## [V0.0.0a7](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/tree/V0.0.0a7) (2023-09-16)
-
-[Full Changelog](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/compare/V0.0.0a6...V0.0.0a7)
-
-## [V0.0.0a6](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/tree/V0.0.0a6) (2023-09-16)
-
-[Full Changelog](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/compare/V0.0.0a5...V0.0.0a6)
-
-## [V0.0.0a5](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/tree/V0.0.0a5) (2023-09-14)
-
-[Full Changelog](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/compare/V0.0.0a4...V0.0.0a5)
-
-## [V0.0.0a4](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/tree/V0.0.0a4) (2023-09-14)
-
-[Full Changelog](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/compare/V0.0.0a3...V0.0.0a4)
-
-## [V0.0.0a3](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/tree/V0.0.0a3) (2023-09-14)
-
-[Full Changelog](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/compare/V0.0.0a2...V0.0.0a3)
-
-## [V0.0.0a2](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/tree/V0.0.0a2) (2023-09-13)
-
-[Full Changelog](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/compare/aedf9aba9d9f8f69d46648e2c72f60a93a9befdd...V0.0.0a2)
+- fix:allow newer workshop [\#12](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/pull/12) ([JarbasAl](https://github.com/JarbasAl))
 
 
 
