@@ -1,10 +1,10 @@
 {
   "disable.ggwave.intent": [
-    "(disattiva|spegni|togli) i codici QR audio",
-    "[UNUSED]"
+    "(disattiva|spegni|togli) (i|) (codici|dati) (QR audio|audio QR|audio|ggware)",
+    "(voglio|rendi|) (i|) (codici|dati) (QR audio|audio QR|audio|ggware) (tolt|spent|disattivat)(o|i)"
   ],
   "enable.ggwave.intent": [
-    "(attiva|accendi|mostra) i codici QR audio",
-    "[UNUSED]"
+    "(attiva|avvia|metti) (i|) (codici|dati) (QR audio|audio QR|audio|ggware)",
+    "(voglio|rendi|) (i|) (codici|dati) (QR audio|audio QR|audio|ggware) (avviat|attiv|attivat|mess|acces)(o|i)"
   ]
 }
