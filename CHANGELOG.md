@@ -1,17 +1,27 @@
 # Changelog
 
-## [V0.3.1a1](https://github.com/OpenVoiceOS/ovos-skill-ggwave/tree/V0.3.1a1) (2024-10-15)
+## [0.3.3a1](https://github.com/OpenVoiceOS/ovos-skill-ggwave/tree/0.3.3a1) (2024-11-04)
 
-[Full Changelog](https://github.com/OpenVoiceOS/ovos-skill-ggwave/compare/0.3.1a2...V0.3.1a1)
-
-## [0.3.1a2](https://github.com/OpenVoiceOS/ovos-skill-ggwave/tree/0.3.1a2) (2024-10-15)
-
-[Full Changelog](https://github.com/OpenVoiceOS/ovos-skill-ggwave/compare/0.3.1...0.3.1a2)
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-skill-ggwave/compare/0.3.3a1...0.3.3a1)
 
 **Merged pull requests:**
 
-- Add Catalan translation [\#7](https://github.com/OpenVoiceOS/ovos-skill-ggwave/pull/7) ([gitlocalize-app[bot]](https://github.com/apps/gitlocalize-app))
-- Add Catalan translation [\#6](https://github.com/OpenVoiceOS/ovos-skill-ggwave/pull/6) ([gitlocalize-app[bot]](https://github.com/apps/gitlocalize-app))
+- fix: Update requirements.txt [\#14](https://github.com/OpenVoiceOS/ovos-skill-ggwave/pull/14) ([JarbasAl](https://github.com/JarbasAl))
+- da-dk/translate [\#13](https://github.com/OpenVoiceOS/ovos-skill-ggwave/pull/13) ([gitlocalize-app[bot]](https://github.com/apps/gitlocalize-app))
+- de-de/translate [\#12](https://github.com/OpenVoiceOS/ovos-skill-ggwave/pull/12) ([gitlocalize-app[bot]](https://github.com/apps/gitlocalize-app))
+- accepted addition translation [\#10](https://github.com/OpenVoiceOS/ovos-skill-ggwave/pull/10) ([gitlocalize-app[bot]](https://github.com/apps/gitlocalize-app))
+
+## [0.3.3a1](https://github.com/OpenVoiceOS/ovos-skill-ggwave/tree/0.3.3a1) (2024-11-02)
+
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-skill-ggwave/compare/V0.3.2...0.3.3a1)
+
+**Merged pull requests:**
+
+- de-de/translate [\#11](https://github.com/OpenVoiceOS/ovos-skill-ggwave/pull/11) ([gitlocalize-app[bot]](https://github.com/apps/gitlocalize-app))
+
+## [V0.3.2](https://github.com/OpenVoiceOS/ovos-skill-ggwave/tree/V0.3.2) (2024-10-17)
+
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-skill-ggwave/compare/0.3.2...V0.3.2)
 
 
 
