@@ -1,27 +1,16 @@
 # Changelog
 
-## [0.3.3a1](https://github.com/OpenVoiceOS/ovos-skill-ggwave/tree/0.3.3a1) (2024-11-04)
+## [0.3.4a1](https://github.com/OpenVoiceOS/ovos-skill-ggwave/tree/0.3.4a1) (2024-11-19)
 
-[Full Changelog](https://github.com/OpenVoiceOS/ovos-skill-ggwave/compare/0.3.3a1...0.3.3a1)
-
-**Merged pull requests:**
-
-- fix: Update requirements.txt [\#14](https://github.com/OpenVoiceOS/ovos-skill-ggwave/pull/14) ([JarbasAl](https://github.com/JarbasAl))
-- da-dk/translate [\#13](https://github.com/OpenVoiceOS/ovos-skill-ggwave/pull/13) ([gitlocalize-app[bot]](https://github.com/apps/gitlocalize-app))
-- de-de/translate [\#12](https://github.com/OpenVoiceOS/ovos-skill-ggwave/pull/12) ([gitlocalize-app[bot]](https://github.com/apps/gitlocalize-app))
-- accepted addition translation [\#10](https://github.com/OpenVoiceOS/ovos-skill-ggwave/pull/10) ([gitlocalize-app[bot]](https://github.com/apps/gitlocalize-app))
-
-## [0.3.3a1](https://github.com/OpenVoiceOS/ovos-skill-ggwave/tree/0.3.3a1) (2024-11-02)
-
-[Full Changelog](https://github.com/OpenVoiceOS/ovos-skill-ggwave/compare/V0.3.2...0.3.3a1)
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-skill-ggwave/compare/V0.3.3...0.3.4a1)
 
 **Merged pull requests:**
 
-- de-de/translate [\#11](https://github.com/OpenVoiceOS/ovos-skill-ggwave/pull/11) ([gitlocalize-app[bot]](https://github.com/apps/gitlocalize-app))
+- fix:allow workshop 3.0.0 [\#15](https://github.com/OpenVoiceOS/ovos-skill-ggwave/pull/15) ([JarbasAl](https://github.com/JarbasAl))
 
-## [V0.3.2](https://github.com/OpenVoiceOS/ovos-skill-ggwave/tree/V0.3.2) (2024-10-17)
+## [V0.3.3](https://github.com/OpenVoiceOS/ovos-skill-ggwave/tree/V0.3.3) (2024-11-04)
 
-[Full Changelog](https://github.com/OpenVoiceOS/ovos-skill-ggwave/compare/0.3.2...V0.3.2)
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-skill-ggwave/compare/0.3.3...V0.3.3)
 
 
 
