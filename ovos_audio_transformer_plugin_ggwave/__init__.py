@@ -7,8 +7,6 @@ from ovos_plugin_manager.templates.transformers import AudioTransformer
 from ovos_utils import create_daemon
 from ovos_utils.log import LOG
 from ovos_utils.messagebus import Message
-from ovos_workshop.app import OVOSAbstractApplication
-from ovos_workshop.decorators import intent_handler
 
 import ggwave
 
