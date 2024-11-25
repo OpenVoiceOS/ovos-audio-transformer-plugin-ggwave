@@ -1,0 +1,22 @@
+{
+  "skill_id": "ovos-skill-ggwave.openvoiceos",
+  "source": "https://github.com/OpenVoiceOS/ovos-skill-ggwave",
+  "package_name": "ovos-færdighed-ggwave",
+  "extra_plugins": {
+    "listener": [
+      "ovos-lyd-transformer-plugin-ggwave"
+    ]
+  },
+  "name": "GGGWave Skill",
+  "description": "Stemmegrænseflade til ggwave plugin.",
+  "examples": [
+    "start ggwave",
+    "tillade lyddata",
+    "deaktiver lydkoder"
+  ],
+  "tags": [
+    "stemmegrænseflade",
+    "lyd plugin",
+    "ggwave"
+  ]
+}
