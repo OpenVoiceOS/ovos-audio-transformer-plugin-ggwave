@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.3.5a4](https://github.com/OpenVoiceOS/ovos-skill-ggwave/tree/0.3.5a4) (2024-12-02)
+
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-skill-ggwave/compare/0.3.5a3...0.3.5a4)
+
+**Merged pull requests:**
+
+- import galician and basque translations [\#23](https://github.com/OpenVoiceOS/ovos-skill-ggwave/pull/23) ([JarbasAl](https://github.com/JarbasAl))
+
 ## [0.3.5a3](https://github.com/OpenVoiceOS/ovos-skill-ggwave/tree/0.3.5a3) (2024-12-02)
 
 [Full Changelog](https://github.com/OpenVoiceOS/ovos-skill-ggwave/compare/0.3.5a2...0.3.5a3)
