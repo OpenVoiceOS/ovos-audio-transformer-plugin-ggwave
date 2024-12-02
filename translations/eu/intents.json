@@ -1,0 +1,10 @@
+{
+    "disable.ggwave.intent": [
+        "(desgaitu|gelditu|ukatu|itxi) (ggwave|audio code|audio codes|audio qr code|audio qr codes|audio data)",
+        "(ggwave|audio code|audio codes|audio qr code|audio qr codes|audio data) itzalita"
+    ],
+    "enable.ggwave.intent": [
+        "(gaitu|hasi|onartu) (ggwave|audio code|audio codes|audio qr code|audio qr codes|audio data)",
+        "(ggwave|audio code|audio codes|audio qr code|audio qr codes|audio data) piztuta"
+    ]
+}

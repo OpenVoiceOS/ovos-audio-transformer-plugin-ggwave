@@ -1,0 +1,14 @@
+{
+    "ggwave.already.disabled.dialog": [
+        "QR audio-kodeak desgaituta daude lehendik"
+    ],
+    "ggwave.already.enabled.dialog": [
+        "QR audio-kodeak gaituta daude lehendik"
+    ],
+    "ggwave.disabled.dialog": [
+        "QR audio-kodeak desgaitzen"
+    ],
+    "ggwave.enabled.dialog": [
+        "QR audio-kodeak 15 minuturako gaitzen"
+    ]
+}
