@@ -1,0 +1,14 @@
+{
+    "ggwave.already.disabled.dialog": [
+        "os códigos QR de audio xa están desactivados"
+    ],
+    "ggwave.already.enabled.dialog": [
+        "os códigos QR de audio xa están activados"
+    ],
+    "ggwave.disabled.dialog": [
+        "desactivando os códigos QR de audio"
+    ],
+    "ggwave.enabled.dialog": [
+        "activando os códigos QR de audio durante 15 minutos"
+    ]
+}
