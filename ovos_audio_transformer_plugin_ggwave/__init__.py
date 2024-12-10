@@ -1,15 +1,12 @@
-import datetime
 import threading
 
+import ggwave
 import pyaudio  # TODO ditch me
 from ovos_config import Configuration
 from ovos_plugin_manager.templates.transformers import AudioTransformer
 from ovos_utils import create_daemon
-from ovos_utils.log import LOG
+from ovos_utils.log import LOG, init_service_logger
 from ovos_utils.messagebus import Message
-
-import ggwave
-
 
 
 class GGWavePlugin(AudioTransformer):
@@ -179,6 +176,7 @@ class GGWavePlugin(AudioTransformer):
 def launch_cli():
     from ovos_utils import wait_for_exit_signal
     from ovos_bus_client.util import get_mycroft_bus
+    init_service_logger("ggwave")
 
     gg = GGWavePlugin({"start_enabled": True})
 

@@ -1,12 +1,12 @@
 # Changelog
 
-## [0.0.3a1](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/tree/0.0.3a1) (2024-11-20)
+## [0.0.4a1](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/tree/0.0.4a1) (2024-12-10)
 
-[Full Changelog](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/compare/0.0.2...0.0.3a1)
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/compare/0.0.3...0.0.4a1)
 
 **Merged pull requests:**
 
-- fix: requirements.txt [\#16](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/pull/16) ([JarbasAl](https://github.com/JarbasAl))
+- init logger when runnign standalone [\#18](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/pull/18) ([JarbasAl](https://github.com/JarbasAl))
 
 
 
