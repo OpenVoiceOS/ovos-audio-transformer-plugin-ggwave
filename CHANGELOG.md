@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.0.6a4](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/tree/0.0.6a4) (2025-12-19)
+
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/compare/0.0.6a3...0.0.6a4)
+
+**Merged pull requests:**
+
+- chore\(deps\): update dependency python to 3.14 [\#25](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/pull/25) ([renovate[bot]](https://github.com/apps/renovate))
+
 ## [0.0.6a3](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/tree/0.0.6a3) (2025-12-19)
 
 [Full Changelog](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/compare/0.0.6a2...0.0.6a3)
