@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.0.6a5](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/tree/0.0.6a5) (2025-12-20)
+
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/compare/0.0.6a4...0.0.6a5)
+
+**Merged pull requests:**
+
+- chore\(deps\): update dependency ovos-plugin-manager to v2 [\#34](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/pull/34) ([renovate[bot]](https://github.com/apps/renovate))
+
 ## [0.0.6a4](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/tree/0.0.6a4) (2025-12-19)
 
 [Full Changelog](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/compare/0.0.6a3...0.0.6a4)
