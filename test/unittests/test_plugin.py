@@ -330,15 +330,75 @@ class TestHandleJson(unittest.TestCase):
         self.assertTrue(len(received) > 0)
 
 
+class TestOnAudio(unittest.TestCase):
+    """Tests for on_audio and _dispatch_payload."""
+
+    def setUp(self) -> None:
+        self.plugin = _make_plugin()
+        self.bus = _bind(self.plugin)
+        self.plugin.user_enabled = True
+
+    def test_on_audio_returns_audio_data_unchanged(self) -> None:
+        """on_audio always returns the original audio bytes."""
+        _ggwave_stub.decode = MagicMock(return_value=None)
+        data = b"\x00" * 2048
+        result = self.plugin.on_audio(data)
+        self.assertEqual(result, data)
+
+    def test_on_audio_dispatches_decoded_payload(self) -> None:
+        """on_audio calls _dispatch_payload when ggwave.decode returns data."""
+        _ggwave_stub.decode = MagicMock(return_value=b"SPEAK:hello")
+        received: list[Message] = []
+        self.bus.on("speak", lambda m: received.append(m))
+        self.plugin.on_audio(b"\x00" * 1024)
+        self.assertEqual(len(received), 1)
+        self.assertEqual(received[0].data["utterance"], "hello")
+
+    def test_on_audio_no_dispatch_when_decode_returns_none(self) -> None:
+        """on_audio does nothing when ggwave.decode returns None."""
+        _ggwave_stub.decode = MagicMock(return_value=None)
+        received: list[Message] = []
+        self.bus.on("speak", lambda m: received.append(m))
+        self.plugin.on_audio(b"\x00" * 1024)
+        self.assertEqual(len(received), 0)
+
+    def test_dispatch_payload_gated_when_user_disabled(self) -> None:
+        """_dispatch_payload drops the payload when user_enabled is False."""
+        self.plugin.user_enabled = False
+        received: list[Message] = []
+        self.bus.on("recognizer_loop:utterance", lambda m: received.append(m))
+        self.plugin._dispatch_payload("UTT:turn on the lights")
+        self.assertEqual(len(received), 0)
+
+    def test_dispatch_payload_dispatches_when_user_enabled(self) -> None:
+        """_dispatch_payload dispatches to the handler when user_enabled is True."""
+        received: list[Message] = []
+        self.bus.on("recognizer_loop:utterance", lambda m: received.append(m))
+        self.plugin._dispatch_payload("UTT:turn on the lights")
+        self.assertEqual(len(received), 1)
+
+    def test_dispatch_payload_unknown_opcode_logs_debug(self) -> None:
+        """_dispatch_payload handles unknown opcodes without raising."""
+        # Should not raise; just logs debug
+        self.plugin._dispatch_payload("UNKNOWN:some payload")
+
+
 class TestDefaultShutdown(unittest.TestCase):
     """Tests for default_shutdown."""
 
-    def test_default_shutdown_sets_stop_event(self) -> None:
-        """default_shutdown sets the _stop event so the monitor thread can exit."""
-        plugin = _make_plugin()
-        _bind(plugin)
-        plugin.default_shutdown()
-        self.assertTrue(plugin._stop.is_set())
+    def test_default_shutdown_releases_ggwave_context(self) -> None:
+        """default_shutdown calls ggwave.free exactly once."""
+        import ggwave as _gg
+        original_free = _gg.free
+        mock_free = MagicMock()
+        _gg.free = mock_free
+        try:
+            plugin = _make_plugin()
+            _bind(plugin)
+            plugin.default_shutdown()
+            mock_free.assert_called_once()
+        finally:
+            _gg.free = original_free
 
     def test_default_shutdown_calls_ggwave_free(self) -> None:
         """default_shutdown calls ggwave.free to release native resources."""
