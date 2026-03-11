@@ -19,7 +19,10 @@ _ggwave_stub = types.ModuleType("ggwave")
 _ggwave_stub.init = MagicMock(return_value=MagicMock())
 _ggwave_stub.free = MagicMock()
 _ggwave_stub.decode = MagicMock(return_value=None)
-sys.modules.setdefault("ggwave", _ggwave_stub)
+# Use the return value so _ggwave_stub always refers to whatever is actually in
+# sys.modules["ggwave"], regardless of whether another test module registered
+# the stub first (setdefault returns the existing value if the key is present).
+_ggwave_stub = sys.modules.setdefault("ggwave", _ggwave_stub)
 
 _pyaudio_stub = types.ModuleType("pyaudio")
 _pyaudio_stub.PyAudio = MagicMock()

@@ -86,3 +86,37 @@ uv run ggwave-cli
 ## What is the plugin entry-point group?
 
 `opm.plugin.audio_transformer` (see `setup.py` / `entry_points.txt`).
+
+Note: the current `setup.py` registers under `neon.plugin.audio` (a legacy group).
+This is a known issue — see `AUDIT.md`.
+
+## How do I write end-to-end tests for this plugin?
+
+Use `MiniListener` from ovoscope to exercise the plugin through the full
+`AudioTransformersService` pipeline without audio hardware:
+
+```python
+import sys, types
+from unittest.mock import MagicMock
+
+# Stub native ggwave before importing plugin
+_stub = types.ModuleType("ggwave")
+_stub.init = MagicMock(return_value=MagicMock())
+_stub.free = MagicMock()
+_stub.decode = MagicMock(return_value=b"UTT:turn on the lights")
+sys.modules.setdefault("ggwave", _stub)
+
+from ovos_audio_transformer_plugin_ggwave import GGWavePlugin
+from ovoscope.listener import get_mini_listener
+
+plugin = GGWavePlugin(config={"start_enabled": True})
+listener = get_mini_listener(
+    plugin_instances={"ovos-audio-transformer-plugin-ggwave": plugin}
+)
+msgs = listener.feed_audio(b"\x00" * 1024)
+assert any(m.msg_type == "recognizer_loop:utterance" for m in msgs)
+listener.shutdown()
+```
+
+See `test/end2end/test_ggwave_transformer.py` for the full test suite and
+`ovoscope/docs/listener.md` for the `MiniListener` API reference.
