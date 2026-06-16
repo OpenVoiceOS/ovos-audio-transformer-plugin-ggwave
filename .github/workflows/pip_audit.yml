@@ -9,3 +9,5 @@ jobs:
   pip_audit:
     uses: OpenVoiceOS/gh-automations/.github/workflows/pip-audit.yml@dev
     secrets: inherit
+    with:
+      system_deps: 'portaudio19-dev'
