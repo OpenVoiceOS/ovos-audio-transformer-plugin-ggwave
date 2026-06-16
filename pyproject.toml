@@ -37,7 +37,7 @@ dependencies = [
 [project.urls]
 Homepage = "https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave"
 
-[project.entry-points."neon.plugin.audio"]
+[project.entry-points."opm.transformer.audio"]
 "ovos-audio-transformer-plugin-ggwave" = "ovos_audio_transformer_plugin_ggwave:GGWavePlugin"
 
 [project.scripts]
