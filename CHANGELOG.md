@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.0.6a8](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/tree/0.0.6a8) (2026-06-16)
+
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/compare/0.0.6a5...0.0.6a8)
+
+**Merged pull requests:**
+
+- chore: add missing shared CI workflows [\#40](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/pull/40) ([JarbasAl](https://github.com/JarbasAl))
+
 ## [0.0.6a5](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/tree/0.0.6a5) (2025-12-20)
 
 [Full Changelog](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/compare/0.0.6a4...0.0.6a5)
