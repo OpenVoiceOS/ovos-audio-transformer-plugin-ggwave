@@ -12,4 +12,3 @@ jobs:
     with:
       python_version: '3.11'
       plugin_type: 'auto'
-      system_deps: 'portaudio19-dev'
