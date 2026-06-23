@@ -1,12 +1,12 @@
-import threading
-
 import ggwave
-import pyaudio  # TODO ditch me
+import numpy as np
 from ovos_config import Configuration
 from ovos_plugin_manager.templates.transformers import AudioTransformer
-from ovos_utils import create_daemon
-from ovos_utils.log import LOG, init_service_logger
+from ovos_utils.log import LOG
 from ovos_utils.messagebus import Message
+
+# ggwave operates natively at 48kHz float32 (see ggwave.getDefaultParameters)
+GGWAVE_SAMPLE_RATE = 48000
 
 
 class GGWavePlugin(AudioTransformer):
@@ -30,7 +30,13 @@ class GGWavePlugin(AudioTransformer):
         self._ssid = None
         self.user_enabled = self.config.get("start_enabled", False)
         self.ggwave = ggwave.init()
-        self._stop = threading.Event()
+        self._freed = False
+        # incoming audio is int16 PCM at the listener's sample rate; ggwave needs
+        # 48kHz float32, so we resample each chunk before decoding. Read the rate
+        # the same way the listener does (mycroft.conf -> listener.sample_rate).
+        listener_conf = Configuration().get("listener", {})
+        self.input_rate = self.config.get("sample_rate") or \
+            listener_conf.get("sample_rate", 16000)
 
     def bind(self, bus=None):
         """ attach messagebus """
@@ -39,7 +45,6 @@ class GGWavePlugin(AudioTransformer):
         # the skill interacts only via messagebus
         self.bus.on("ovos.ggwave.enable", self.handle_enable)
         self.bus.on("ovos.ggwave.disable", self.handle_disable)
-        self.daemon = create_daemon(self.monitor_thread)
 
     def handle_enable(self, message: Message):
         self.user_enabled = True
@@ -119,72 +124,69 @@ class GGWavePlugin(AudioTransformer):
 
         self._ssid = None
 
-    def on_audio(self, audio_data):
-        """ Take any action you want, audio_data is a non-speech chunk
+    def _to_ggwave_audio(self, audio_data: bytes) -> bytes:
+        """Convert a listener audio chunk to ggwave's native format.
+
+        Incoming chunks are int16 PCM at ``self.input_rate``; ggwave decodes
+        float32 at 48kHz, so we normalize and (when needed) linearly resample.
         """
-        # TODO - remove thread and check ggwave audio here instead!
-        # audio_data from listener is usually 16000 sample rate
-        # not sure if ggwave requires 1024 chunk size?
+        samples = np.frombuffer(audio_data, dtype=np.int16).astype(np.float32) / 32768.0
+        if self.input_rate != GGWAVE_SAMPLE_RATE and len(samples):
+            n_out = int(round(len(samples) * GGWAVE_SAMPLE_RATE / self.input_rate))
+            samples = np.interp(np.linspace(0, len(samples) - 1, n_out),
+                                np.arange(len(samples)), samples).astype(np.float32)
+        return samples.tobytes()
+
+    def on_audio(self, audio_data):
+        """Sniff each non-speech audio chunk for ggwave data-over-sound.
+
+        ggwave keeps decode state internally across calls, so each resampled
+        chunk is fed straight through; the audio itself is returned unchanged.
+        """
+        if not audio_data:
+            return audio_data
+        try:
+            res = ggwave.decode(self.ggwave, self._to_ggwave_audio(audio_data))
+        except Exception:
+            LOG.exception("ggwave decode failed")
+            return audio_data
+        if res is not None:
+            try:
+                self._handle_payload(res.decode("utf-8"))
+            except Exception:
+                LOG.exception("failed to handle ggwave payload")
         return audio_data
 
-    def monitor_thread(self):
-        p = pyaudio.PyAudio()
+    def _handle_payload(self, payload: str):
+        """Dispatch a decoded ggwave payload to its opcode handler."""
+        snd = Configuration().get("sounds", {}).get("ggwave_success", "snd/acknowledge.mp3")
+        if snd:  # play an acknowledgement that *something* was decoded
+            self.bus.emit(Message("mycroft.audio.play_sound", {"uri": snd}))
 
-        stream = p.open(format=pyaudio.paFloat32, channels=1, rate=48000, input=True, frames_per_buffer=1024)
+        for opcode, handler in self.OPCODES.items():
+            if payload.startswith(opcode):
+                data = payload.split(opcode, 1)[-1]
+                if self.user_enabled:
+                    handler(data)
+                else:
+                    LOG.info("ignoring ggwave payload, user did not enable ggwave")
+                return
 
-        try:
-            while not self._stop.is_set():
-                data = stream.read(1024, exception_on_overflow=False)
-                res = ggwave.decode(self.ggwave, data)
-                if (not res is None):
-                    try:
-                        payload = res.decode("utf-8")
-                        snd = Configuration().get("sounds", {}).get("ggwave_success", "snd/acknowledge.mp3")
-                        if snd:
-                            # no sound by default
-                            self.bus.emit(Message("mycroft.audio.play_sound", {"uri": snd}))
-
-                        for opcode, handler in self.OPCODES.items():
-                            if payload.startswith(opcode):
-                                p = payload.split(opcode, 1)[-1]
-                                if self.user_enabled:
-                                    handler(p)
-                                else:
-                                    LOG.info("ignoring ggwave payload, user did not enable ggwave")
-                                break
-                        else:
-                            LOG.debug(f"invalid ggwave payload: {payload}")
-                            snd = Configuration().get("sounds", {}).get("ggwave_error")
-                            if snd:
-                                # no sound by default
-                                self.bus.emit(Message("mycroft.audio.play_sound", {"uri": snd}))
-                    except:
-                        pass
-        except KeyboardInterrupt:
-            pass
-
-        stream.stop_stream()
-        stream.close()
-        p.terminate()
+        LOG.debug(f"invalid ggwave payload: {payload}")
+        snd = Configuration().get("sounds", {}).get("ggwave_error")
+        if snd:  # no sound by default
+            self.bus.emit(Message("mycroft.audio.play_sound", {"uri": snd}))
 
     def default_shutdown(self):
         """ perform any shutdown actions """
-        self._stop.set()
-        ggwave.free(self.ggwave)
+        # ggwave allows a limited number of live instances; free ours exactly
+        # once. The base AudioTransformer exposes ``default_shutdown`` as the
+        # override hook, while the dinkum listener service calls ``shutdown``,
+        # so both delegate here and the flag keeps the free idempotent.
+        if not self._freed:
+            self._freed = True
+            ggwave.free(self.ggwave)
 
-
-def launch_cli():
-    from ovos_utils import wait_for_exit_signal
-    from ovos_bus_client.util import get_mycroft_bus
-    init_service_logger("ggwave")
-
-    gg = GGWavePlugin({"start_enabled": True})
-
-    bus = get_mycroft_bus()
-    gg.bind(bus)
-
-    wait_for_exit_signal()  # wait for CTRl+C
-
-
-if __name__ == "__main__":
-    launch_cli()
+    def shutdown(self):
+        """ alias so the listener service also releases the ggwave instance """
+        self.default_shutdown()
