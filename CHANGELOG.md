@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.0a1](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/tree/1.0.0a1) (2026-06-23)
+
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/compare/0.0.6a8...1.0.0a1)
+
+**Breaking changes:**
+
+- feat!: decode ggwave inside the audio-transformer pipeline [\#42](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/pull/42) ([JarbasAl](https://github.com/JarbasAl))
+
 ## [0.0.6a8](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/tree/0.0.6a8) (2026-06-16)
 
 [Full Changelog](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/compare/0.0.6a5...0.0.6a8)
