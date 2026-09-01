@@ -1,17 +1,17 @@
 # GGWave audio plugin
 
-plugin for https://github.com/ggerganov/ggwave
+This is an OVOS audio transformer plugin for [ggwave](https://github.com/ggerganov/ggwave). It decodes audio QR codes (sound-based data messages) heard by the microphone and acts on them.
 
-Emit audio QR codes to be handled by this plugin
+You can test the plugin from your [browser](https://openvoiceos.github.io/ovos-audio-transformer-plugin-ggwave/), including WiFi setup.
 
-Interact with this plugin from your [browser](https://openvoiceos.github.io/ovos-audio-transformer-plugin-ggwave/), including WiFi setup
+The companion skill [OpenVoiceOS/ovos-skill-ggwave](https://github.com/OpenVoiceOS/ovos-skill-ggwave) lets you enable or disable this plugin by voice.
 
-The companion skill [OpenVoiceOS/ovos-skill-ggwave](https://github.com/OpenVoiceOS/ovos-skill-ggwave) allows you to enable/disable this plugin by voice
-
-Skill stores support installing skills via GGWave:
+These skill stores support installing skills through GGWave:
 - [OVOS-skills-store](https://openvoiceos.github.io/OVOS-skills-store)
 - [OVOS-Hatchery-skills](https://ovoshatchery.github.io/OVOS-Hatchery-skills)
-  
+
+To install skills this way, allow ovos-core to install Python packages:
+
 ```javascript
 "skills": {
     "installer": {
@@ -21,19 +21,22 @@ Skill stores support installing skills via GGWave:
     }
 }
 ```
-> **TIP** Allow ovos-core to install python packages, otherwise the install commands from this plugin will error out
+
+> **TIP** Allow ovos-core to install Python packages. Otherwise the install commands from this plugin fail.
 
 ## Install
 
-`pip install ovos-audio-transformer-plugin-ggwave`
+```bash
+pip install ovos-audio-transformer-plugin-ggwave
+```
 
-> ggwave [fails to install on python 3.11](https://github.com/ggerganov/ggwave/issues/89), you can use the wheel from here https://whl.smartgic.io/ , plugin install should then work
+> ggwave [fails to install on Python 3.11](https://github.com/ggerganov/ggwave/issues/89). Use the wheel from [whl.smartgic.io](https://whl.smartgic.io/) instead, then the plugin install works.
 
-## Listener Plugin
+## Listener plugin
 
-To have this plugin loaded by dinkum-listener, enable it in mycroft.conf
+To load this plugin from dinkum-listener, enable it in `mycroft.conf`.
 
-> **WARNING** currently not recommended, see [bug report in dinkum-listener](https://github.com/OpenVoiceOS/ovos-dinkum-listener/issues/98)
+> **WARNING** This is currently not recommended. See the [bug report in dinkum-listener](https://github.com/OpenVoiceOS/ovos-dinkum-listener/issues/98).
 
 ```javascript
 "listener": {
@@ -56,68 +59,64 @@ indefinitely once enabled. It has no effect on `start_enabled`: enabling the
 listener via config is an explicit operator decision to run always-on, and
 does not arm the timer.
 
-## Standalone
+## Valid audio data
 
-You can also run the plugin in standalone mode, in it's own process or docker container
+This repo provides a test interface on [GitHub Pages](https://openvoiceos.github.io/ovos-audio-transformer-plugin-ggwave/). You can also test your own payloads at [ggwave-js.ggerganov.com](https://ggwave-js.ggerganov.com/).
 
-Launch with the console entrypoint
-```bash
-ovos-ggwave-listener
-```
+### WiFi setup
 
-## Valid Audio Data
+Emit a message that sets the WiFi SSID:
 
-this repo provides a test interface via [github pages](https://openvoiceos.github.io/ovos-audio-transformer-plugin-ggwave/)
-
-you can also test your own payloads via https://ggwave-js.ggerganov.com/ 
-
-### Wifi setup
-
-emit a message setting the wifi SSID
 `SSID:123456`
 
-after the SSID is set, emit a message setting the wifi password
+After the SSID is set, emit a message that sets the WiFi password:
+
 `PSWD:123456`
 
-if password is empty then it is assumed to be an open network
+If the password is empty, the plugin treats the network as open:
+
 `PSWD:`
 
-once password is received a bus message is sent for [ovos-PHAL-plugin-network-manager](https://github.com/OpenVoiceOS/ovos-PHAL-plugin-network-manager) to handle
+Once the password is received, the plugin sends a bus message for [ovos-PHAL-plugin-network-manager](https://github.com/OpenVoiceOS/ovos-PHAL-plugin-network-manager) to handle.
 
-### Install a github skill
+### Install a GitHub skill
 
-install a skill from a github url
+Install a skill from a GitHub URL:
 
 `GHS:https://github.com/OpenVoiceOS/skill-ovos-icanhazdadjokes`
 
-### Install a python package
+### Install a Python package
 
-install any package from pypi
+Install any package from PyPI:
 
 `PIP:skill-wikipedia-for-humans`
 
 ### Utterance
 
-inject an utterance in the messagebus like if the user spoke it to the microphone
+Inject an utterance into the messagebus, as if the user spoke it to the microphone:
 
 `UTT:hello cruel world`
 
 ### Speak
 
-make a OVOS device speak
+Make an OVOS device speak:
 
 `SPEAK:hello world`
 
 ### Bus
 
-inject a simple message in the messagebus
+Inject a simple message into the messagebus:
 
 `BUS:recognizer_loop:sleep`
 
-### Json
+### JSON
 
-inject a serialized message in the messagebus
+Inject a serialized message into the messagebus:
 
 `JSON:{"type": "speak", "data": {"utterance": "hello"}, "context": {}}`
 
+## Related projects
 
+- [OpenVoiceOS/ovos-skill-ggwave](https://github.com/OpenVoiceOS/ovos-skill-ggwave) — voice control for this plugin
+- [OpenVoiceOS/ovos-PHAL-plugin-network-manager](https://github.com/OpenVoiceOS/ovos-PHAL-plugin-network-manager) — handles WiFi setup messages sent by this plugin
+- [OpenVoiceOS/ovos-dinkum-listener](https://github.com/OpenVoiceOS/ovos-dinkum-listener) — listener service that can load this plugin
