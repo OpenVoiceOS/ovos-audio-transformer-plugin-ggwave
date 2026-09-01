@@ -1,3 +1,5 @@
+import threading
+
 import ggwave
 import numpy as np
 from ovos_config import Configuration
@@ -28,6 +30,17 @@ class GGWavePlugin(AudioTransformer):
             "RMPIP:": self.handle_remove_pip
         }
         self._ssid = None
+        # security hardening: when the listener is enabled over the bus
+        # (`ovos.ggwave.enable`), auto-disable after `listen_timeout` seconds
+        # so a stray/forgotten enable does not leave data-over-sound
+        # listening on forever. 0 (or negative) disables this behavior.
+        # `start_enabled: true` in config is an explicit operator decision
+        # to run always-on and never arms the timer.
+        self.listen_timeout = self._coerce_timeout(
+            self.config.get("listen_timeout"), 300)
+        self._timeout_timer = None
+        self._timeout_lock = threading.Lock()
+        self._timeout_gen = 0
         self.user_enabled = self.config.get("start_enabled", False)
         self.ggwave = ggwave.init()
         self._freed = False
@@ -38,6 +51,18 @@ class GGWavePlugin(AudioTransformer):
         self.input_rate = self.config.get("sample_rate") or \
             listener_conf.get("sample_rate", 16000)
 
+    @staticmethod
+    def _coerce_timeout(value, default):
+        """Coerce a config/bus supplied timeout to float, falling back to `default`."""
+        if value is None:
+            return default
+        try:
+            return float(value)
+        except (TypeError, ValueError):
+            LOG.warning(f"invalid listen_timeout value: {value!r}, "
+                        f"falling back to {default}")
+            return default
+
     def bind(self, bus=None):
         """ attach messagebus """
         super().bind(bus)
@@ -46,8 +71,79 @@ class GGWavePlugin(AudioTransformer):
         self.bus.on("ovos.ggwave.enable", self.handle_enable)
         self.bus.on("ovos.ggwave.disable", self.handle_disable)
 
+    def _cancel_locked(self):
+        """Cancel any pending auto-disable timer. Caller must hold `_timeout_lock`."""
+        if self._timeout_timer is not None:
+            self._timeout_timer.cancel()
+            self._timeout_timer = None
+
+    def _cancel_timeout(self):
+        """Cancel any pending auto-disable timer."""
+        with self._timeout_lock:
+            self._timeout_gen += 1
+            self._cancel_locked()
+
+    def _arm_timeout(self, timeout=None, message=None):
+        """(Re)arm the auto-disable timer.
+
+        Cancels any timer already running (re-enabling resets the countdown)
+        and starts a fresh one, unless the effective timeout is <= 0.
+        `message` is the bus message that triggered the enable and is used
+        to forward the eventual auto-disable announcement to the same
+        session.
+        """
+        with self._timeout_lock:
+            self._cancel_locked()
+            if timeout is None:
+                timeout = self.listen_timeout
+            if timeout is None or timeout <= 0:
+                return
+            self._timeout_gen += 1
+            gen = self._timeout_gen
+            self._timeout_timer = threading.Timer(timeout, self._auto_disable,
+                                                   args=(gen, message))
+            self._timeout_timer.daemon = True
+            self._timeout_timer.start()
+
+    def _auto_disable(self, gen, message=None):
+        """Fired by the timer once the listen timeout elapses."""
+        with self._timeout_lock:
+            if gen != self._timeout_gen:
+                # superseded by a newer arm/cancel, this callback is stale
+                return
+            if not self.user_enabled:
+                return
+            self.user_enabled = False
+            self._timeout_timer = None
+        LOG.info("ggwave listen timeout reached, auto-disabling listener")
+        # forward from the enabling message so the announcement lands in
+        # the session that enabled the listener, not a fresh/default one
+        if message is not None:
+            self.bus.emit(message.forward("ovos.ggwave.disabled"))
+            # TODO - dedicated sound
+            self.bus.emit(message.forward("mycroft.audio.play_sound",
+                                          {"uri": "snd/acknowledge.mp3"}))
+        else:
+            self.bus.emit(Message("ovos.ggwave.disabled"))
+            # TODO - dedicated sound
+            self.bus.emit(Message("mycroft.audio.play_sound",
+                                  {"uri": "snd/acknowledge.mp3"}))
+
     def handle_enable(self, message: Message):
         self.user_enabled = True
+        # listen_timeout <= 0 is the config off-switch: the listener runs
+        # indefinitely and no bus-supplied timeout can override that
+        if self.listen_timeout is None or self.listen_timeout <= 0:
+            self._cancel_timeout()
+        else:
+            timeout = self._coerce_timeout(message.data.get("timeout"), self.listen_timeout)
+            if timeout <= 0:
+                timeout = self.listen_timeout
+            # a requested timeout may never exceed the configured ceiling, so a
+            # ggwave payload cannot defeat the security hardening by requesting
+            # an arbitrarily large timeout
+            timeout = min(timeout, self.listen_timeout)
+            self._arm_timeout(timeout, message)
         self.bus.emit(message.forward("ovos.ggwave.enabled"))
         # TODO - dedicated sound
         self.bus.emit(Message("mycroft.audio.play_sound",
@@ -55,6 +151,7 @@ class GGWavePlugin(AudioTransformer):
 
     def handle_disable(self, message: Message):
         self.user_enabled = False
+        self._cancel_timeout()
         self.bus.emit(message.forward("ovos.ggwave.disabled"))
         # TODO - dedicated sound
         self.bus.emit(Message("mycroft.audio.play_sound",
@@ -183,6 +280,7 @@ class GGWavePlugin(AudioTransformer):
         # once. The base AudioTransformer exposes ``default_shutdown`` as the
         # override hook, while the dinkum listener service calls ``shutdown``,
         # so both delegate here and the flag keeps the free idempotent.
+        self._cancel_timeout()
         if not self._freed:
             self._freed = True
             ggwave.free(self.ggwave)

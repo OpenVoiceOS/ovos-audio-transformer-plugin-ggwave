@@ -39,11 +39,22 @@ To have this plugin loaded by dinkum-listener, enable it in mycroft.conf
 "listener": {
     "audio_transformers": {
         "ovos-audio-transformer-plugin-ggwave": {
-            "start_enabled": true
+            "start_enabled": true,
+            "listen_timeout": 300
         }
     }
 }
 ```
+
+`listen_timeout` (seconds, default `300`) auto-disables the listener after it
+has been enabled over the bus with `ovos.ggwave.enable`, so a stray or
+forgotten enable does not leave data-over-sound listening on forever. This is
+a security default: an enabled listener can trigger opcodes such as `BUS:`,
+`PIP:`, and `GHS:` (install a skill from a GitHub URL) for anyone in earshot.
+Set it to `0` (or a negative number) to disable this behavior and listen
+indefinitely once enabled. It has no effect on `start_enabled`: enabling the
+listener via config is an explicit operator decision to run always-on, and
+does not arm the timer.
 
 ## Standalone
 
