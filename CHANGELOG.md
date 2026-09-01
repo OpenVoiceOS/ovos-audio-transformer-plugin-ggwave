@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.1.0a1](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/tree/1.1.0a1) (2026-09-01)
+
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/compare/1.0.0a1...1.1.0a1)
+
+**Merged pull requests:**
+
+- feat: auto-disable the ggwave listener after a configurable timeout [\#45](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/pull/45) ([JarbasAl](https://github.com/JarbasAl))
+
 ## [1.0.0a1](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/tree/1.0.0a1) (2026-06-23)
 
 [Full Changelog](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/compare/0.0.6a8...1.0.0a1)
