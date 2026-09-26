@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.1.0a3](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/tree/1.1.0a3) (2026-09-26)
+
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/compare/1.1.0a2...1.1.0a3)
+
+**Merged pull requests:**
+
+- ci: the build test runs the suite [\#49](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/pull/49) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
 ## [1.1.0a2](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/tree/1.1.0a2) (2026-09-01)
 
 [Full Changelog](https://github.com/OpenVoiceOS/ovos-audio-transformer-plugin-ggwave/compare/1.1.0a1...1.1.0a2)
