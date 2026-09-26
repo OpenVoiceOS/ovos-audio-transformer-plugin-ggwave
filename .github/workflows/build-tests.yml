@@ -13,3 +13,11 @@ jobs:
       python_versions: '["3.10", "3.11", "3.12", "3.13", "3.14"]'
       install_extras: 'test'
       test_path: 'test'
+      # Without test_path the reusable workflow skips its Run Tests step
+      # entirely (it is gated on `inputs.test_path != ''`) and still reports
+      # success, so this job built and installed the wheel and ran no test.
+      test_path: 'test'
+      # test/end2end is the intelligibility round-trip, which needs ovoscope
+      # and an STT model. The TTS Intelligibility workflow already runs that
+      # file with its own model cache, so it stays out of here.
+      pytest_args: '--ignore=test/end2end'
